@@ -1,0 +1,441 @@
+<title>CloudPBX × ZCC — Tổng quan</title>
+<style>
+  :root {
+    --bg: #EEF1F6; --surface: #FFFFFF; --surface-2: #F5F7FB;
+    --ink: #131922; --ink-soft: #47515F; --muted: #6B7686; --line: #DCE1EA;
+    --accent: #2350D9; --accent-soft: #E5EBFF;
+    --zalo: #0E8FB0; --zalo-soft: #DBF3F8;
+    --pstn: #B45309; --pstn-soft: #FBEEDD;
+    --good: #15803D; --good-soft: #DCFAE6;
+    --warn: #B45B00; --warn-soft: #FBEFD9;
+    --crit: #C2323B; --crit-soft: #FBE3E4;
+    --shadow: 0 1px 2px rgba(19,25,34,.05), 0 8px 24px -12px rgba(19,25,34,.14);
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    --maxw: 74ch;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0E121A; --surface: #161C27; --surface-2: #1C2431;
+      --ink: #E8ECF3; --ink-soft: #AEB8C7; --muted: #7E8A9C; --line: #2A3342;
+      --accent: #6E90FF; --accent-soft: #1E2A4D;
+      --zalo: #3FC6E0; --zalo-soft: #123039; --pstn: #E9A155; --pstn-soft: #3A2A16;
+      --good: #4ADE80; --good-soft: #12331F; --warn: #FBBF24; --warn-soft: #372A10;
+      --crit: #F87171; --crit-soft: #3A1B1E;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 30px -14px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #EEF1F6; --surface: #FFFFFF; --surface-2: #F5F7FB;
+    --ink: #131922; --ink-soft: #47515F; --muted: #6B7686; --line: #DCE1EA;
+    --accent: #2350D9; --accent-soft: #E5EBFF; --zalo: #0E8FB0; --zalo-soft: #DBF3F8;
+    --pstn: #B45309; --pstn-soft: #FBEEDD; --good: #15803D; --good-soft: #DCFAE6;
+    --warn: #B45B00; --warn-soft: #FBEFD9; --crit: #C2323B; --crit-soft: #FBE3E4;
+    --shadow: 0 1px 2px rgba(19,25,34,.05), 0 8px 24px -12px rgba(19,25,34,.14);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0E121A; --surface: #161C27; --surface-2: #1C2431;
+    --ink: #E8ECF3; --ink-soft: #AEB8C7; --muted: #7E8A9C; --line: #2A3342;
+    --accent: #6E90FF; --accent-soft: #1E2A4D; --zalo: #3FC6E0; --zalo-soft: #123039;
+    --pstn: #E9A155; --pstn-soft: #3A2A16; --good: #4ADE80; --good-soft: #12331F;
+    --warn: #FBBF24; --warn-soft: #372A10; --crit: #F87171; --crit-soft: #3A1B1E;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 30px -14px rgba(0,0,0,.6);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-sans); line-height: 1.62; -webkit-font-smoothing: antialiased; font-size: 16px; }
+  .page { max-width: 880px; margin: 0 auto; padding: 0 22px; }
+
+  header.top { border-bottom: 1px solid var(--line); background: linear-gradient(180deg, var(--surface), var(--surface-2)); }
+  .top-inner { max-width: 880px; margin: 0 auto; padding: 40px 22px 30px; }
+  .eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+  .eyebrow::before { content: ""; width: 26px; height: 2px; background: var(--accent); }
+  h1 { font-size: clamp(27px, 4.2vw, 40px); line-height: 1.09; margin: 0; letter-spacing: -.02em; text-wrap: balance; font-weight: 720; }
+  h1 .x { color: var(--muted); font-weight: 400; margin: 0 .18em; }
+  .lede { color: var(--ink-soft); max-width: 60ch; margin: 14px 0 0; font-size: 17px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .tags span { font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft); background: var(--surface); border: 1px solid var(--line); padding: 4px 11px; border-radius: 20px; }
+
+  main { padding: 30px 0 70px; }
+  section { margin: 0 0 48px; }
+  h2 { font-size: 24px; letter-spacing: -.01em; margin: 0 0 4px; display: flex; align-items: baseline; gap: 13px; font-weight: 700; }
+  h2 .sec { font-family: var(--font-mono); font-size: 13px; color: var(--accent); font-weight: 600; }
+  .sub { color: var(--muted); font-size: 14.5px; margin: 0 0 16px; max-width: var(--maxw); }
+  h3 { font-size: 16px; margin: 24px 0 6px; }
+  p { max-width: var(--maxw); color: var(--ink-soft); }
+  strong { color: var(--ink); font-weight: 640; }
+  code { font-family: var(--font-mono); font-size: .87em; background: var(--surface); border: 1px solid var(--line); padding: 1px 6px; border-radius: 5px; color: var(--ink); }
+  .callout { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 10px; padding: 14px 18px; margin: 16px 0; font-size: 14.5px; color: var(--ink-soft); max-width: var(--maxw); }
+  .callout b { color: var(--ink); }
+  .callout.zalo { border-left-color: var(--zalo); }
+  ul.clean { max-width: var(--maxw); padding-left: 0; list-style: none; color: var(--ink-soft); }
+  ul.clean li { position: relative; padding-left: 20px; margin: 6px 0; font-size: 14.5px; }
+  ul.clean li::before { content: "›"; position: absolute; left: 2px; color: var(--accent); font-weight: 700; }
+
+  /* two cases */
+  .cases { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 18px 0; }
+  .case { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; box-shadow: var(--shadow); }
+  .case .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; display: inline-block; margin-bottom: 12px; background: var(--accent-soft); color: var(--accent); }
+  .case.z .k { background: var(--zalo-soft); color: var(--zalo); }
+  .case h4 { margin: 0 0 8px; font-size: 15.5px; }
+  .case p { font-size: 14px; margin: 0; }
+  .case .how { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line); }
+
+  /* routing channels */
+  .routing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 20px 0; }
+  .route { padding: 15px 17px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); }
+  .route .chip { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 6px; display: inline-block; margin-bottom: 10px; }
+  .route.z1 .chip, .route.z2 .chip { background: var(--zalo-soft); color: var(--zalo); }
+  .route.p1 .chip { background: var(--pstn-soft); color: var(--pstn); }
+  .route .cond { font-size: 13.5px; color: var(--ink); font-weight: 560; }
+  .route .dial { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+  /* mermaid figure (SVG image) */
+  .mfig { margin: 18px 0; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); background: var(--surface); }
+  .mfig figcaption { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 12px 18px; border-bottom: 1px solid var(--line); background: var(--surface-2); display: flex; align-items: center; gap: 9px; }
+  .mfig figcaption::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex: none; }
+  .mfig-scroll { overflow-x: auto; background: #ffffff; padding: 20px 22px; }
+  .mfig-scroll svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+  .mfig-scroll img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+
+  /* diagram card */
+  .diagram { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 22px; margin: 18px 0; }
+  .diagram .cap { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; display: flex; align-items: center; gap: 9px; }
+  .diagram .cap::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+  /* architecture zones */
+  .zones { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; align-items: stretch; }
+  .zone { border: 1.5px dashed var(--line); border-radius: 13px; padding: 14px; display: flex; flex-direction: column; gap: 10px; background: var(--surface-2); }
+  .zone .zh { font-size: 12.5px; font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+  .zone .zh i { width: 9px; height: 9px; border-radius: 3px; display: inline-block; }
+  .zone.pbx .zh i { background: var(--accent); } .zone.zcc .zh i { background: var(--zalo); } .zone.ext .zh i { background: var(--pstn); }
+  .node { background: var(--surface); border: 1px solid var(--line); border-radius: 9px; padding: 9px 12px; font-size: 13px; }
+  .node b { display: block; font-size: 13px; color: var(--ink); }
+  .node span { font-size: 11.5px; color: var(--muted); font-family: var(--font-mono); }
+  .node.hl { border-color: var(--zalo); background: var(--zalo-soft); }
+  .zone-note { text-align: center; font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); margin: 14px 0 0; }
+
+  /* stepper */
+  .steps { display: flex; flex-direction: column; }
+  .step { display: grid; grid-template-columns: 40px 1fr; gap: 14px; padding: 0 0 18px; position: relative; }
+  .step:not(:last-child)::before { content: ""; position: absolute; left: 19px; top: 34px; bottom: 0; width: 2px; background: var(--line); }
+  .step .num { width: 38px; height: 38px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-family: var(--font-mono); font-weight: 700; font-size: 15px; display: grid; place-items: center; z-index: 1; }
+  .step.z .num { background: var(--zalo-soft); color: var(--zalo); }
+  .step.p .num { background: var(--pstn-soft); color: var(--pstn); }
+  .step .body { padding-top: 6px; }
+  .step .body b { font-size: 15px; }
+  .step .body p { margin: 3px 0 0; font-size: 14px; max-width: 62ch; }
+  .step .body code { font-size: 12.5px; }
+
+  /* call decision */
+  .decide { display: flex; flex-direction: column; gap: 12px; }
+  .qbox { text-align: center; background: var(--accent-soft); color: var(--accent); font-weight: 650; border-radius: 12px; padding: 13px; font-size: 14.5px; font-family: var(--font-mono); }
+  .branch { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .path { border: 1px solid var(--line); border-radius: 13px; padding: 16px; background: var(--surface); }
+  .path.yes { border-top: 3px solid var(--zalo); } .path.no { border-top: 3px solid var(--pstn); }
+  .path .lab { font-family: var(--font-mono); font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+  .path.yes .lab { color: var(--zalo); } .path.no .lab { color: var(--pstn); }
+  .path .mini { display: flex; flex-direction: column; gap: 8px; }
+  .path .mini div { font-size: 13px; color: var(--ink-soft); padding-left: 18px; position: relative; }
+  .path .mini div::before { content: "→"; position: absolute; left: 0; color: var(--muted); }
+  .path .mini div code { font-size: 12px; }
+  .path .mini .timer { color: var(--pstn); font-weight: 600; }
+  .path .mini .timer::before { content: "⏱"; }
+  .path .mini .ok { color: var(--good); } .path .mini .ok::before { content: "✓"; color: var(--good); }
+
+  /* ---- MOCKUP ---- */
+  .mock-frame { margin: 18px 0; border-radius: 16px; border: 1px solid var(--line); box-shadow: var(--shadow); overflow: hidden; background: var(--surface); }
+  .mock-chrome { display: flex; align-items: center; gap: 8px; padding: 10px 15px; background: var(--surface-2); border-bottom: 1px solid var(--line); }
+  .mock-chrome .dots { display: flex; gap: 6px; }
+  .mock-chrome .dots i { width: 11px; height: 11px; border-radius: 50%; display: block; }
+  .mock-chrome .dots i:nth-child(1){ background:#E5695B; } .mock-chrome .dots i:nth-child(2){ background:#E4B04A; } .mock-chrome .dots i:nth-child(3){ background:#5FBE6E; }
+  .mock-chrome .url { font-family: var(--font-mono); font-size: 12px; color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 3px 12px; }
+  .app-head { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid var(--line); gap: 12px; flex-wrap: wrap; }
+  .app-head .brand { display: flex; align-items: center; gap: 12px; }
+  .app-head .logo { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, var(--accent), var(--zalo)); display: grid; place-items: center; color: #fff; font-family: var(--font-mono); font-weight: 700; font-size: 12px; }
+  .app-head .brand b { font-size: 15px; } .app-head .brand span { display: block; font-size: 12px; color: var(--muted); }
+  .app-head .who { font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft); background: var(--surface-2); border: 1px solid var(--line); padding: 5px 12px; border-radius: 20px; }
+  .app-body { padding: 20px; display: grid; gap: 16px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 7px; color: var(--ink); }
+  .field .hint { font-weight: 400; color: var(--muted); font-size: 12px; }
+  select, textarea { width: 100%; font-family: inherit; font-size: 14px; color: var(--ink); background: var(--surface-2); border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; }
+  textarea { min-height: 100px; resize: vertical; font-family: var(--font-mono); font-size: 13px; line-height: 1.7; }
+  select:focus, textarea:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: center; justify-content: space-between; }
+  .opts { display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: var(--ink-soft); }
+  .opts label { display: flex; align-items: center; gap: 9px; cursor: pointer; }
+  .opts input { accent-color: var(--accent); width: 15px; height: 15px; }
+  .counter { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); }
+  .counter b { color: var(--good); } .counter i { color: var(--crit); font-style: normal; }
+  .btns { display: flex; gap: 10px; }
+  button { font-family: inherit; font-size: 13.5px; font-weight: 600; padding: 10px 18px; border-radius: 9px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+  button:active { transform: translateY(1px); }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.ghost:hover { background: var(--surface-2); }
+  .result { border-top: 1px solid var(--line); margin: 4px -20px -20px; padding: 16px 20px 20px; background: var(--surface-2); }
+  .result-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+  .result-head h4 { margin: 0; font-size: 12.5px; font-family: var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .summary { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+  .pill.sent { background: var(--good-soft); color: var(--good); }
+  .pill.skip { background: var(--surface); color: var(--muted); border: 1px solid var(--line); }
+  .pill.fail { background: var(--crit-soft); color: var(--crit); }
+  .res-table { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; min-width: 470px; font-size: 13px; }
+  th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line); }
+  thead th { font-family: var(--font-mono); font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); background: var(--surface-2); }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.ph { font-family: var(--font-mono); }
+  td .st { font-family: var(--font-mono); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 5px; white-space: nowrap; }
+  .st.follow { background: var(--zalo-soft); color: var(--zalo); }
+  .st.granted { background: var(--good-soft); color: var(--good); }
+  .st.need { background: var(--warn-soft); color: var(--warn); }
+  .st.invalid { background: var(--crit-soft); color: var(--crit); }
+  .act-sent { color: var(--good); font-weight: 600; } .act-skip { color: var(--muted); } .act-fail { color: var(--crit); font-weight: 600; }
+
+  footer { border-top: 1px solid var(--line); padding: 24px 0 50px; color: var(--muted); font-size: 13px; }
+  footer .page { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  footer code { font-size: 12px; }
+
+  @media (max-width: 760px) { .cases, .routing, .zones, .branch { grid-template-columns: 1fr; } }
+
+  /* ---- PRINT / PDF ---- */
+  @media print {
+    :root { --bg: #fff; --surface: #fff; --surface-2: #F5F7FB; --ink: #131922; --ink-soft: #33404F; --line: #D3D9E2; }
+    body { font-size: 11pt; background: #fff; }
+    .page, .top-inner { max-width: 100%; }
+    header.top { background: #fff; }
+    section { margin-bottom: 16px; }
+    /* keep atomic blocks intact, but let sections flow to fill pages */
+    .mfig, .mock-frame, .case, .callout, .routing, .cases, figure { break-inside: avoid; page-break-inside: avoid; box-shadow: none; }
+    .mfig-scroll img { break-inside: avoid; }
+    ul.clean li { break-inside: avoid; }
+    h2, h3 { break-after: avoid; page-break-after: avoid; }
+    .sub { break-after: avoid; }
+    .btns, .mock-chrome .url { display: none; }
+    footer { border-top: none; padding-top: 8px; }
+    /* architecture on its own landscape page */
+    #kien-truc { page: landscape; break-before: page; break-after: page; break-inside: avoid; }
+  }
+  @page { margin: 13mm; size: A4; }
+  @page landscape { margin: 12mm; size: A4 landscape; }
+</style>
+
+<header class="top">
+  <div class="top-inner">
+    <p class="eyebrow">Tài liệu thiết kế .</p>
+    <h1>Module ZCC <span class="x">·</span> CloudPBX <span class="x">×</span> Zalo OA</h1>
+    <p class="lede">Định tuyến cuộc gọi outbound của Agent CSOC (FTEL) qua kênh Zalo OA, tự động fallback sang SIP Trunk PSTN — kèm giao diện gửi yêu cầu cấp quyền gọi (consent) hàng loạt.</p>
+    <div class="tags">
+      <span>Đơn vị: SCC, CSOC / FPT Telecom</span>
+      <span>Tổng đài: CloudPBX (Core FreeSWITCH)</span>
+      <span>v0.1 · 2026-07-15</span>
+    </div>
+  </div>
+</header>
+
+<div class="page"><main>
+
+  <!-- 01 -->
+  <section id="boi-canh">
+    <h2><span class="sec">01</span> Bối cảnh nghiệp vụ</h2>
+    <p class="sub">Khách hàng FTEL định danh bằng số điện thoại; Zalo định danh bằng UserID. ZCC làm cầu nối và quản lý trạng thái quyền gọi.</p>
+    <p>Tổng đài lưu khách bằng <strong>số điện thoại</strong>, còn Zalo định danh mỗi user bằng <strong>UserID (UID)</strong> trong phạm vi một OA. Module <strong>ZCC</strong> chịu trách nhiệm: chuyển đổi <code>phone ↔ UID</code>, quản lý quyền gọi (follow / consent), cung cấp API gửi yêu cầu cấp quyền và API quyết định định tuyến cho tổng đài. Có hai trường hợp gọi ra qua Zalo OA:</p>
+
+    <div class="cases">
+      <div class="case z">
+        <span class="k">Trường hợp 1</span>
+        <h4>Khách đã quan tâm (follow) OA</h4>
+        <p>Gọi bằng <strong>UserID</strong>. Không cần kiểm tra quyền nếu khách chưa bỏ quan tâm và còn trong <strong>30 ngày</strong> kể từ tương tác gần nhất.</p>
+        <p class="how">hook event follow → API get user detail (sharing) → map phone↔UID</p>
+      </div>
+      <div class="case">
+        <span class="k">Trường hợp 2</span>
+        <h4>Khách chưa quan tâm OA</h4>
+        <p>Gọi bằng <strong>số điện thoại (84xxx)</strong>. Phải gửi <strong>yêu cầu cấp quyền gọi</strong> trước; khách đồng ý thì gọi được, hiệu lực <strong>30 ngày</strong>.</p>
+        <p class="how">Zalo hỗ trợ gửi consent theo số thuần — không cần map UID trước</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <b>Luật định tuyến khi Agent bấm gọi.</b> Nếu số đủ điều kiện Zalo OA → ưu tiên gọi Zalo; sau <b>20 giây</b> chưa kết nối → fallback <b>SIP Trunk PSTN</b>. Nếu không đủ điều kiện → gọi thẳng PSTN. ZCC trả quyết định qua endpoint <code>/resolve</code>.
+    </div>
+
+    <div class="routing">
+      <div class="route z1"><span class="chip">ZALO_UID</span><div class="cond">Follower còn hạn 30 ngày</div><div class="dial">dial_target = UID</div></div>
+      <div class="route z2"><span class="chip">ZALO_PHONE</span><div class="cond">Consent GRANTED còn hạn</div><div class="dial">dial_target = 84xxx (qua Zalo)</div></div>
+      <div class="route p1"><span class="chip">PSTN_ONLY</span><div class="cond">Không thoả điều kiện Zalo</div><div class="dial">dial_target = 84xxx (PSTN)</div></div>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section id="giao-dien">
+    <h2><span class="sec">02</span> Giao diện gửi yêu cầu cấp quyền gọi</h2>
+    <p class="sub">Màn hình web đơn giản: user được phân quyền (<code>zcc.consent.send</code>) nhập một hoặc nhiều số và gửi consent request tới Zalo user.</p>
+    <p>Hệ thống chuẩn hoá số về <code>84xxx</code> (E.164), loại trùng/loại số sai, kiểm tra trạng thái từng số, chỉ gửi cho số <strong>chưa đủ điều kiện & chưa gửi gần đây</strong> (chống spam, tôn trọng quota Zalo), trả <strong>báo cáo theo từng số</strong>. Kiểm tra quyền ở <strong>cả frontend và backend</strong>; mọi thao tác ghi audit log.</p>
+
+    <div class="mock-frame">
+      <div class="mock-chrome">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <span class="url">cloudpbx.internal / zcc / consent</span>
+      </div>
+      <div class="app-head">
+        <div class="brand">
+          <div class="logo">ZCC</div>
+          <div><b>Gửi yêu cầu cấp quyền gọi Zalo</b><span>Zalo Cloud Connect · outbound consent</span></div>
+        </div>
+        <div class="who">agent.csoc · zcc.consent.send</div>
+      </div>
+      <div class="app-body">
+        <div class="field">
+          <label for="oa">OA áp dụng</label>
+          <select id="oa"><option>CallCenter OA · 1234567890</option><option>CSOC Support OA · 1234567891</option></select>
+        </div>
+        <div class="field">
+          <label for="phones">Số điện thoại khách hàng <span class="hint">— mỗi số 1 dòng, hoặc phân tách bằng dấu phẩy · hỗ trợ dán từ CSV</span></label>
+          <textarea id="phones" spellcheck="false">84901234567
+0912345678
+84987654321, 0977000111
+84900</textarea>
+        </div>
+        <div class="toolbar">
+          <div class="opts">
+            <label><input type="checkbox" id="opt-callable" checked> Bỏ qua số đã đủ điều kiện gọi (follow / consent còn hạn)</label>
+            <label><input type="checkbox" id="opt-recent" checked> Bỏ qua số vừa gửi trong 24h</label>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-end;">
+            <div class="counter" id="counter">Đã nhập: <b>4</b> số hợp lệ · <i>1</i> lỗi</div>
+            <div class="btns">
+              <button class="ghost" id="btn-check">Kiểm tra</button>
+              <button class="primary" id="btn-send">Gửi yêu cầu</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="result" id="result">
+        <div class="result-head">
+          <h4 id="result-title">Kết quả</h4>
+          <div class="summary" id="summary">
+            <span class="pill sent">2 đã gửi</span><span class="pill skip">2 bỏ qua</span><span class="pill fail">1 lỗi</span>
+          </div>
+        </div>
+        <div class="res-table"><table>
+          <thead><tr><th>Số điện thoại</th><th>Trạng thái</th><th>Hành động</th><th>Ghi chú</th></tr></thead>
+          <tbody id="res-body">
+            <tr><td class="ph">84901234567</td><td><span class="st follow">Đã follow</span></td><td class="act-skip">Bỏ qua</td><td>Gọi được ngay (UID)</td></tr>
+            <tr><td class="ph">84912345678</td><td><span class="st need">Chưa quyền</span></td><td class="act-sent">✓ Đã gửi</td><td>req_id: a1b2</td></tr>
+            <tr><td class="ph">84987654321</td><td><span class="st granted">Có quyền</span></td><td class="act-skip">Bỏ qua</td><td>Hết hạn 12/08</td></tr>
+            <tr><td class="ph">84977000111</td><td><span class="st need">Chưa quyền</span></td><td class="act-sent">✓ Đã gửi</td><td>req_id: c3d4</td></tr>
+            <tr><td class="ph">84900</td><td><span class="st invalid">Sai định dạng</span></td><td class="act-fail">✕ Bỏ qua</td><td>Không phải 84xxx</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+    <p style="font-size:13.5px; color:var(--muted);">Mockup tương tác — sửa số rồi bấm <b>Kiểm tra</b> (chỉ tra trạng thái) hoặc <b>Gửi yêu cầu</b> (mô phỏng). Trạng thái cuối <code>GRANTED</code>/<code>DENIED</code> đến sau qua webhook, không qua response gửi.</p>
+  </section>
+
+  <!-- 03 -->
+  <section id="kien-truc">
+    <h2><span class="sec">03</span> Kiến trúc tổng quan</h2>
+    <p class="sub">ZCC gồm frontend (màn hình consent) và backend (API, webhook receiver, worker/queue, core services, DB, cache).</p>
+    <figure class="mfig">
+      <figcaption>mermaid — sơ đồ thành phần &amp; tích hợp</figcaption>
+      <div class="mfig-scroll"><img src="images/CloudPBX_ZCC_kientruc.svg" alt="Kiến trúc tổng quan ZCC — mermaid" loading="lazy"></div>
+    </figure>
+  </section>
+
+  <!-- 04 -->
+  <section id="event">
+    <h2><span class="sec">04</span> Luồng xử lý event (Webhook)</h2>
+    <p class="sub">ZCC lắng nghe event từ Zalo để cập nhật mapping/consent. Bắt buộc idempotent (dedupe theo event_id) và verify trước khi xử lý.</p>
+    <figure class="mfig">
+      <figcaption>draw.io — follow · share info · consent reply · unfollow</figcaption>
+      <div class="mfig-scroll"><img src="images/CloudPBX_ZCC_luong_event.drawio.svg" alt="Luồng xử lý event (Webhook) — draw.io" loading="lazy"></div>
+    </figure>
+    <ul class="clean">
+      <li><b>follow_oa</b> — verify + dedupe → <code>GET user detail (sharing)</code> lấy phone → <code>upsert ZALO_USER</code> (is_follower, +30d) → invalidate <code>callable(phone)</code>.</li>
+      <li><b>user_shared_info</b> — cập nhật <code>ZALO_USER.phone</code>, củng cố mapping <code>phone↔UID</code>.</li>
+      <li><b>user_consent_reply</b> — <code>upsert CONSENT</code> (GRANTED, +30d) + cập nhật <code>CONSENT_REQUEST</code> → refresh cache.</li>
+      <li><b>unfollow_oa</b> — <code>is_follower=false</code> → invalidate cache; số chuyển về PSTN trừ khi còn CONSENT hợp lệ.</li>
+    </ul>
+    <div class="callout zalo"><b>Vì sao cần luồng này?</b> Nhờ webhook cập nhật liên tục, trạng thái <code>callable</code> luôn sẵn ở cache → endpoint <code>/resolve</code> trả quyết định nhanh cho việc lựa chọn kênh gọi điện.</div>
+  </section>
+
+  <!-- 05 -->
+  <section id="consent">
+    <h2><span class="sec">05</span> Luồng gửi yêu cầu cấp quyền gọi điện (bulk)</h2>
+    <p class="sub">API trả 202 Accepted ngay, worker gửi bất đồng bộ để UI không treo khi nhập nhiều số; tôn trọng quota cấp quyền của Zalo (ngày/tuần/tháng).</p>
+    <figure class="mfig">
+      <figcaption>draw.io — validate → enqueue → worker gửi → webhook</figcaption>
+      <div class="mfig-scroll"><img src="images/CloudPBX_ZCC_luong_consent.drawio.svg" alt="Luồng gửi yêu cầu cấp quyền (bulk) — draw.io" loading="lazy"></div>
+    </figure>
+    <ul class="clean">
+      <li><b>POST /consent/batch</b> — check quyền <code>zcc.consent.send</code> → normalize <code>84xxx</code>, loại trùng/sai → tạo <code>CONSENT_BATCH</code> + <code>CONSENT_REQUEST[]</code> → trả <code>202 { batch_id }</code>.</li>
+      <li><b>Lọc &amp; enqueue</b> — số đủ điều kiện/vừa gửi → <code>SKIPPED</code>; số cần gửi (kể cả chưa follow) → <code>enqueue sendConsent</code>.</li>
+      <li><b>Worker</b> — dequeue → check quota → gửi API. Thành công → <code>SENT</code> (+ <code>zalo_request_id</code>); lỗi/quota → <code>FAILED</code> + reason (backoff).</li>
+      <li><b>Kết quả cuối</b> — user đồng ý → event <code>consent_reply</code> về webhook (mục 04); UI <code>poll GET /consent/batch/{id}</code>.</li>
+    </ul>
+  </section>
+
+  <!-- 06 -->
+  <section id="call">
+    <h2><span class="sec">06</span> Luồng gọi điện (Zalo-first, fallback 20s)</h2>
+    <p class="sub">Fallback 20s đặt tại dialplan Core FreeSWITCH (biến ZALO_CALL_TIMEOUT); ZCC chỉ trả quyết định qua /resolve và ghi call-log.</p>
+    <figure class="mfig">
+      <figcaption>draw.io — resolve → Zalo (timeout 20s) → fallback PSTN</figcaption>
+      <div class="mfig-scroll"><img src="images/CloudPBX_ZCC_luong_goi.drawio.svg" alt="Luồng gọi điện (Zalo-first, fallback 20s) — draw.io" loading="lazy"></div>
+    </figure>
+    <div class="routing">
+      <div class="route z2"><span class="chip">ZALO_*</span><div class="cond"><code>INVITE</code> tới ZCC SIP, timeout 20s</div><div class="dial">&lt;20s: 200 OK · call-log ZALO_OA</div></div>
+      <div class="route p1"><span class="chip">TIMEOUT</span><div class="cond">Quá 20s / lỗi → <code>CANCEL</code></div><div class="dial">INVITE PSTN · reason: zalo_timeout</div></div>
+      <div class="route p1"><span class="chip">PSTN_ONLY</span><div class="cond"><code>INVITE</code> 84xxx qua PSTN ngay</div><div class="dial">call-log { channel: PSTN }</div></div>
+    </div>
+    <div class="callout"><b>Ghi nhận:</b> mọi cuộc gọi lưu <code>CALL_LOG</code> với <code>channel</code> (ZALO_OA / PSTN) và <code>zalo_wait_ms</code> — phục vụ báo cáo hiệu quả & chi phí.</div>
+  </section>
+
+</main></div>
+
+<footer><div class="page">
+  <span>Module ZCC · CloudPBX × Zalo OA</span>
+  <span>Người phụ trách: QuyDT7</span>
+</div></footer>
+
+<script>
+  (function(){
+    var ta = document.getElementById('phones');
+    var counter = document.getElementById('counter');
+    var body = document.getElementById('res-body');
+    var summary = document.getElementById('summary');
+    var title = document.getElementById('result-title');
+    function normalize(raw){ var t = raw.trim().replace(/[.\s]/g,''); if(!t) return null; if(t.charAt(0)==='+') t=t.slice(1); if(t.charAt(0)==='0') t='84'+t.slice(1); return t; }
+    function valid(p){ return /^84\d{9}$/.test(p); }
+    function parse(){ var raw=ta.value.split(/[\n,;]+/), seen={}, list=[]; raw.forEach(function(r){ var n=normalize(r); if(n===null) return; if(seen[n]) return; seen[n]=1; list.push({phone:n, ok:valid(n)}); }); return list; }
+    function updateCounter(){ var l=parse(), good=l.filter(function(x){return x.ok;}).length, bad=l.length-good; counter.innerHTML='Đã nhập: <b>'+good+'</b> số hợp lệ · <i>'+bad+'</i> lỗi'; }
+    ta.addEventListener('input', updateCounter);
+    function classify(phone){ var d=parseInt(phone.slice(-1),10); if(d%4===0) return {st:'follow',label:'Đã follow',note:'Gọi được ngay (UID)'}; if(d%4===1) return {st:'granted',label:'Có quyền',note:'Còn hạn · hết 12/08'}; if(d%7===0) return {st:'need',label:'Chưa quyền',note:'Quá quota ngày',forceFail:true}; return {st:'need',label:'Chưa quyền',note:'Chưa follow OA'}; }
+    function cell(c,t){ return '<td class="'+c+'">'+t+'</td>'; }
+    function stCell(s,l){ return '<td><span class="st '+s+'">'+l+'</span></td>'; }
+    function pill(c,t){ var s=document.createElement('span'); s.className='pill '+c; s.textContent=t; return s; }
+    function render(mode){
+      var list=parse(); body.innerHTML=''; var counts={sent:0,skip:0,fail:0};
+      var skipCallable=document.getElementById('opt-callable').checked;
+      list.forEach(function(item){
+        var tr=document.createElement('tr');
+        if(!item.ok){ counts.fail++; tr.innerHTML=cell('ph',item.phone)+stCell('invalid','Sai định dạng')+'<td class="act-fail">✕ Bỏ qua</td>'+cell('','Không phải 84xxx'); body.appendChild(tr); return; }
+        var c=classify(item.phone), callable=(c.st==='follow'||c.st==='granted'), action, actClass, note=c.note;
+        if(callable && skipCallable){ action='Bỏ qua'; actClass='act-skip'; counts.skip++; }
+        else if(mode==='check'){ action='Cần gửi'; actClass='act-skip'; }
+        else if(c.forceFail){ action='✕ Lỗi gửi'; actClass='act-fail'; counts.fail++; }
+        else { action='✓ Đã gửi'; actClass='act-sent'; counts.sent++; note='req_id: '+item.phone.slice(-4)+Math.random().toString(36).slice(2,4); }
+        tr.innerHTML=cell('ph',item.phone)+stCell(c.st,c.label)+'<td class="'+actClass+'">'+action+'</td>'+cell('',note);
+        body.appendChild(tr);
+      });
+      title.textContent = mode==='check' ? 'Kết quả kiểm tra' : 'Kết quả gửi';
+      summary.innerHTML='';
+      if(mode==='send'){ summary.appendChild(pill('sent',counts.sent+' đã gửi')); summary.appendChild(pill('skip',counts.skip+' bỏ qua')); summary.appendChild(pill('fail',counts.fail+' lỗi')); }
+      else { var need=list.filter(function(x){return x.ok;}).length-counts.skip; summary.appendChild(pill('sent',need+' cần gửi')); summary.appendChild(pill('skip',counts.skip+' đủ điều kiện')); summary.appendChild(pill('fail',counts.fail+' không hợp lệ')); }
+    }
+    document.getElementById('btn-check').addEventListener('click', function(){ render('check'); });
+    document.getElementById('btn-send').addEventListener('click', function(){ render('send'); });
+  })();
+</script>
