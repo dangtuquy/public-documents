@@ -1,0 +1,889 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SCC · Báo cáo 1H/2026 & Định hướng 2H</title>
+
+<style>
+/* ============================================================ TOKENS
+   Atlas Design System — 3 theme thật (§1.5) */
+:root{
+  --e1:#E1EDFA; --e2:#ADCBEA; --e3:#79A9DB; --e4:#4587C8; --e5:#0465AF;
+  --route:#F37021; --check:#00A650; --blue:#0066B3;
+  --risk-high:#B3261E; --risk-med:#96660A;
+  --risk-bg:#FBE9E7; --route-bg:#FDE8D8;
+  --ink:#0F1C26; --ink-soft:#35485A; --grey:#5D7186; --faint:#93A6B6;
+  --grat:#DFE8EF; --rule:#D5E0E9; --paper:#FBFCFD; --paper-2:#F1F5F9;
+  --step-ink:#173D5E; --arrow-ink:#8A3D06;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono","Roboto Mono","DejaVu Sans Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --e1:#222F3C; --e2:#2E4A67; --e3:#386695; --e4:#4584C2; --e5:#5AA3EC;
+    --route:#FF8A44; --check:#35C46F; --blue:#4EA3E0;
+    --risk-high:#F27A70; --risk-med:#E0AC4A;
+    --risk-bg:#2B1A18; --route-bg:#2C1C10;
+    --ink:#E6EEF6; --ink-soft:#B9C8D6; --grey:#8DA0B2; --faint:#5E7185;
+    --grat:#1D2A36; --rule:#263442; --paper:#0A121A; --paper-2:#101B25;
+    --step-ink:#DCE9F6; --arrow-ink:#FFD3B0;
+  }
+}
+:root[data-theme="dark"]{
+  --e1:#222F3C; --e2:#2E4A67; --e3:#386695; --e4:#4584C2; --e5:#5AA3EC;
+  --route:#FF8A44; --check:#35C46F; --blue:#4EA3E0;
+  --risk-high:#F27A70; --risk-med:#E0AC4A;
+  --risk-bg:#2B1A18; --route-bg:#2C1C10;
+  --ink:#E6EEF6; --ink-soft:#B9C8D6; --grey:#8DA0B2; --faint:#5E7185;
+  --grat:#1D2A36; --rule:#263442; --paper:#0A121A; --paper-2:#101B25;
+  --step-ink:#DCE9F6; --arrow-ink:#FFD3B0;
+}
+:root[data-theme="light"]{
+  --e1:#E1EDFA; --e2:#ADCBEA; --e3:#79A9DB; --e4:#4587C8; --e5:#0465AF;
+  --route:#F37021; --check:#00A650; --blue:#0066B3;
+  --risk-high:#B3261E; --risk-med:#96660A;
+  --risk-bg:#FBE9E7; --route-bg:#FDE8D8;
+  --ink:#0F1C26; --ink-soft:#35485A; --grey:#5D7186; --faint:#93A6B6;
+  --grat:#DFE8EF; --rule:#D5E0E9; --paper:#FBFCFD; --paper-2:#F1F5F9;
+  --step-ink:#173D5E; --arrow-ink:#8A3D06;
+}
+
+/* ============================================================ SHELL */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family:var(--sans); color:var(--ink);
+  background:var(--paper-2);
+  display:flex; flex-direction:column;
+  -webkit-font-smoothing:antialiased;
+}
+.viewport{flex:1 1 auto; min-height:0; display:grid; place-items:center; padding:2vmin}
+.stage{
+  height:100%; width:auto; max-width:100%;
+  aspect-ratio:16/9;
+  container-type:size;
+  position:relative; overflow:hidden;
+  background:var(--paper);
+  border:1px solid var(--rule);
+}
+:focus-visible{outline:2px solid var(--route); outline-offset:3px}
+
+/* ============================================================ SLIDE */
+.slide{
+  position:absolute; inset:0;
+  padding:3.6cqw 4.1cqw 2.2cqw;
+  display:none; flex-direction:column;
+}
+.slide[data-active]{display:flex}
+.slide.cover{padding-left:7.9cqw; justify-content:center}
+.stripe{position:absolute; left:0; top:0; bottom:0; width:1.05cqw; background:var(--route)}
+
+h1{font-size:4.55cqw; line-height:1.02; letter-spacing:-.035em; margin:0; font-weight:700; text-wrap:balance}
+h2{font-size:2.5cqw; line-height:1.05; letter-spacing:-.025em; margin:.55cqw 0 0; font-weight:700}
+.sub{font-size:1.72cqw; color:var(--ink-soft); margin:1.5cqw 0 0; letter-spacing:-.01em}
+.rule{height:0; border-top:1px solid var(--rule); margin:2.1cqw 0 0; width:63cqw}
+.rule.full{width:auto; margin:.9cqw 0 0}
+
+/* nhãn mono — §3 */
+.anno{font-family:var(--mono); font-size:.9cqw; font-weight:700;
+      letter-spacing:.16em; text-transform:uppercase; color:var(--route)}
+.sheet{font-family:var(--mono); font-size:.92cqw; font-weight:700;
+       letter-spacing:.13em; text-transform:uppercase; color:var(--faint); margin-top:1.5cqw}
+.lbl{font-family:var(--mono); font-size:.82cqw; font-weight:700;
+     letter-spacing:.14em; text-transform:uppercase; color:var(--faint)}
+.lbl.rt{color:var(--route)} .lbl.up{color:var(--e5)}
+
+.head{display:flex; justify-content:space-between; align-items:baseline; gap:2cqw}
+.pres{font-family:var(--mono); font-size:.85cqw; font-weight:700;
+      letter-spacing:.11em; text-transform:uppercase; color:var(--faint); white-space:nowrap}
+.pg{position:absolute; right:4.1cqw; bottom:1.5cqw; font-family:var(--mono);
+    font-size:.8cqw; letter-spacing:.09em; color:var(--faint); font-variant-numeric:tabular-nums}
+.body{flex:1 1 auto; min-height:0; display:flex; flex-direction:column; margin-top:1.9cqw}
+
+.chip{display:inline-flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:.8cqw; font-weight:700; letter-spacing:.06em;
+  padding:.32cqw .7cqw; border:1px solid var(--rule); border-radius:1.4cqw;
+  color:var(--ink-soft); white-space:nowrap}
+.chip.rt{border-color:var(--route); color:var(--route)}
+.chip.solid{background:var(--route); border-color:var(--route); color:var(--paper)}
+.chip.ghost{border-style:dashed; border-color:var(--faint); color:var(--grey)}
+.chip.risk{background:var(--risk-bg); border-color:var(--risk-high); color:var(--risk-high)}
+
+/* ---------- S2 · bảng OKR ---------- */
+.okr{width:100%; border-collapse:collapse; table-layout:fixed; font-variant-numeric:tabular-nums}
+.okr th{text-align:left; padding:0 0 .55cqw; font-family:var(--mono); font-size:.85cqw;
+  font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--faint)}
+.okr td{border-top:1px solid var(--grat); padding:.5cqw .55cqw .5cqw 0;
+  font-size:.86cqw; line-height:1.3; color:var(--ink-soft); vertical-align:top}
+.okr tr:last-child td{border-bottom:1px solid var(--rule)}
+.okr .kr{color:var(--ink); font-weight:700; padding-right:1cqw}
+.okr .q3{background:var(--paper-2); padding-left:.7cqw}
+.okr .q4{color:var(--grey); padding-left:.7cqw}
+.okr .st{text-align:center; font-weight:700; font-size:1cqw; color:var(--check)}
+.okr .st.na{color:var(--faint)}
+.result{display:flex; align-items:center; gap:1.3cqw; margin:0 0 1.1cqw;
+  border-left:.32cqw solid var(--route); padding:.15cqw 0 .15cqw 1.1cqw}
+.result > b{font-size:2.9cqw; color:var(--e5); letter-spacing:-.035em; line-height:1}
+.result span{font-size:1.02cqw; line-height:1.4; color:var(--ink)}
+.result .pc{color:var(--route)}
+.result em{font-style:normal; font-size:.85cqw; color:var(--grey)}
+.okr tr.off .kr{color:var(--faint); font-weight:400}
+.okr tr.off .q3, .okr tr.off .q4{opacity:.72}
+.okr-foot{display:flex; justify-content:space-between; align-items:flex-end; margin-top:1.1cqw; gap:2cqw}
+.stats{display:flex; gap:2.4cqw}
+.stat{text-align:right}
+.stat b{display:block; font-size:1.35cqw; color:var(--e5); letter-spacing:-.02em}
+.stat span{font-family:var(--mono); font-size:.65cqw; font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--faint)}
+
+/* ---------- S3 · ma trận 3 hạng mục × 3 phần ---------- */
+.mx{flex:1; display:grid; grid-template-columns:9.2cqw repeat(3,1fr);
+    grid-template-rows:repeat(5,auto); gap:.55cqw .9cqw; align-content:start}
+.mx-h{grid-row:1; font-size:1.18cqw; font-weight:700; letter-spacing:-.02em;
+      padding-bottom:.3cqw; border-bottom:1px solid var(--rule)}
+.mx-r{align-self:start; padding-top:.5cqw}
+.cell{padding:.7cqw .8cqw; font-size:.88cqw; line-height:1.38; color:var(--ink-soft)}
+.cell.now{background:var(--paper-2)}
+.cell.why{background:var(--risk-bg); border:1px dashed var(--risk-high); color:var(--risk-high)}
+.cell.why .who{display:block; margin-top:.45cqw; font-family:var(--mono); font-size:.72cqw;
+  font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--risk-high); opacity:.85}
+.cell.fix{border:1px solid var(--e4); background:var(--paper); color:var(--ink)}
+.out-tag{grid-column:2 / 5; display:flex; justify-content:flex-end; margin-top:-.25cqw}
+.closing{margin-top:auto; font-size:1.15cqw; font-weight:700; letter-spacing:-.015em;
+  padding-top:1cqw; border-top:1px solid var(--rule)}
+
+/* ---------- S4 · hai lực đối nghịch ---------- */
+.sec-lbl{display:block; margin-bottom:.45cqw}
+.now-box{font-size:.95cqw; line-height:1.45; color:var(--ink-soft); margin:0 0 1.1cqw}
+.now-box b{color:var(--ink)}
+.forces{position:relative; height:14.6cqw; margin-bottom:.5cqw}
+.arrow{position:absolute; height:4.3cqw; display:flex; align-items:center; padding:0 2.4cqw}
+.arrow span{font-family:var(--mono); font-size:.88cqw; font-weight:700; letter-spacing:.07em}
+.arrow.r{left:0; width:42%; top:.7cqw; background:var(--e2); color:var(--step-ink);
+  clip-path:polygon(0 0, calc(100% - 2.4cqw) 0, 100% 50%, calc(100% - 2.4cqw) 100%, 0 100%)}
+.arrow.l{left:18%; width:42%; top:6.5cqw; background:var(--route-bg); color:var(--arrow-ink);
+  clip-path:polygon(2.4cqw 0, 100% 0, 100% 100%, 2.4cqw 100%, 0 50%)}
+.zone{position:absolute; left:18%; top:0; width:24%; height:11.5cqw;
+  border:1.5px dashed var(--route)}
+.zone b{position:absolute; left:-3cqw; right:-3cqw; bottom:-2.1cqw; text-align:center;
+  font-family:var(--mono); font-size:.85cqw; letter-spacing:.13em; color:var(--route)}
+.evi{position:absolute; right:0; top:6.2cqw; width:37%}
+.evi b{display:block; font-size:1.18cqw; line-height:1.25; letter-spacing:-.02em}
+.evi p{margin:.4cqw 0 0; font-size:.82cqw; line-height:1.4; color:var(--grey)}
+.why-list{margin:0; padding:0; list-style:none; position:absolute; right:0; top:.5cqw; width:37%}
+.why-list li{font-size:.85cqw; line-height:1.35; color:var(--ink-soft); padding-left:1.4cqw;
+  position:relative; margin-bottom:.35cqw}
+.why-list li b{font-family:var(--mono); position:absolute; left:0; color:var(--route)}
+.levers{display:grid; grid-template-columns:1fr 1fr; gap:2.1cqw; margin-top:.4cqw}
+.lever{background:var(--paper-2); padding:1cqw 1.15cqw}
+.lever h3{margin:0 0 .45cqw; font-size:1.12cqw; letter-spacing:-.02em}
+.lever p{margin:0; font-size:.85cqw; line-height:1.45; color:var(--ink-soft)}
+
+/* ---------- S5 · vùng phủ ---------- */
+.cover-wrap{display:grid; grid-template-columns:41% 1fr; gap:0 3cqw; flex:1}
+.cols{display:grid; grid-template-columns:repeat(3,1fr); gap:1.6cqw; align-content:start}
+.col{display:flex; flex-direction:column}
+.bar{height:17.5cqw; display:flex; flex-direction:column}
+.bar .empty{border:1px dashed var(--faint); display:grid; place-items:center;
+  font-family:var(--mono); font-size:.74cqw; color:var(--grey); text-align:center; padding:.3cqw}
+.bar .fill{background:var(--e4); display:grid; place-items:start center; padding-top:.45cqw;
+  font-family:var(--mono); font-size:.74cqw; font-weight:700; color:#fff}
+.cells{display:flex; flex-direction:column; gap:.2cqw; height:17.5cqw}
+.cells i{flex:1; border:1px dashed var(--faint)}
+.cells i.on{background:var(--e4); border:1px solid var(--e4)}
+.col b{margin-top:.6cqw; text-align:center; font-size:1cqw}
+.anchor{text-align:center; margin-top:.9cqw}
+.anchor b{display:block; font-size:2.7cqw; color:var(--e5); letter-spacing:-.035em; line-height:1}
+.anchor span{font-family:var(--mono); font-size:.64cqw; font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--faint)}
+.side{border-left:1px solid var(--rule); padding-left:3cqw; display:flex; flex-direction:column}
+.plain{margin:.35cqw 0 1.05cqw; padding:0; list-style:none}
+.plain li{font-size:.9cqw; line-height:1.4; color:var(--ink-soft); padding-left:1.4cqw;
+  position:relative; margin-bottom:.42cqw}
+.plain li b{font-family:var(--mono); position:absolute; left:0; color:var(--route); font-size:.82cqw}
+.plain li em{display:block; margin-top:.22cqw; font-style:italic; font-size:.76cqw; color:var(--grey)}
+.plain li strong{color:var(--ink)}
+.goals{margin:.35cqw 0 0; padding:0; list-style:none}
+.goals li{font-size:.88cqw; line-height:1.5; color:var(--ink-soft); padding-left:1.4cqw; position:relative}
+.goals li::before{content:""; position:absolute; left:0; top:.62cqw; width:.75cqw;
+  height:0; border-top:1px solid var(--route)}
+
+/* ---------- S6 · thang CASAN ---------- */
+.casan{display:grid; grid-template-columns:41% 1fr; gap:0 3cqw; flex:1}
+.steps{display:grid; grid-template-columns:repeat(5,1fr); align-items:end;
+  height:20cqw; position:relative}
+.steps i{display:block}
+.steps .s1{height:20%;background:var(--e1)} .steps .s2{height:40%;background:var(--e2)}
+.steps .s3{height:60%;background:var(--e3)} .steps .s4{height:80%;background:var(--e4)}
+.steps .s5{height:100%;background:var(--e5)}
+.step-lbl{display:grid; grid-template-columns:repeat(5,1fr); margin-top:.55cqw}
+.step-lbl span{text-align:center; font-family:var(--mono); font-size:.8cqw; font-weight:700;
+  letter-spacing:.06em; color:var(--ink)}
+.step-lbl span.now{color:var(--route)}
+.pins{display:grid; grid-template-columns:repeat(5,1fr); position:relative; height:2cqw}
+.pins .chip{position:absolute; transform:translateX(-50%)}
+.meter{height:1.75cqw; background:var(--grat); display:flex; margin:.9cqw 0 1.3cqw}
+.meter i{background:var(--e5); width:44%}
+.meter u{flex:1; border:1.5px dashed var(--route)}
+.big{font-size:5.2cqw; color:var(--e5); font-weight:700; letter-spacing:-.04em; line-height:.92}
+.gap-row{display:flex; align-items:flex-end; gap:1.8cqw}
+.gap-row p{margin:0 0 .5cqw; font-size:.95cqw; line-height:1.35; color:var(--grey)}
+.knots{margin:0; padding:0; list-style:none}
+.knots li{display:grid; grid-template-columns:1.7cqw 1fr auto; gap:.5cqw;
+  align-items:baseline; padding:.42cqw 0; font-size:.9cqw; color:var(--ink-soft)}
+.knots li b{font-family:var(--mono); color:var(--route); font-size:.95cqw}
+.knots li.out, .knots li.out b{color:var(--faint)}
+.punch{border-top:1px solid var(--rule); margin-top:auto; padding-top:1.2cqw;
+  font-size:1.85cqw; font-weight:700; letter-spacing:-.03em}
+
+/* ---------- S7 · tuyến đường ---------- */
+.track{position:relative; height:11.2cqw; margin-top:.4cqw}
+.ms{position:absolute; top:0; width:26cqw}
+.ms b{font-family:var(--mono); font-size:1.05cqw; color:var(--route); letter-spacing:.05em}
+.ms p{margin:.28cqw 0 0; font-size:.86cqw; line-height:1.3; color:var(--ink-soft)}
+.road{position:absolute; left:0; right:0; top:6.4cqw; height:0}
+.road i{position:absolute; top:0; border-top:2.5px solid var(--route)}
+.road i.dash{border-top-style:dashed}
+.node{position:absolute; top:6.4cqw; transform:translate(-50%,-50%);
+  width:1.9cqw; height:1.9cqw; border-radius:50%; border:2px solid var(--route);
+  background:var(--paper); box-shadow:0 0 0 .5cqw var(--paper)}
+.node.on{background:var(--route)}
+.node-lbl{position:absolute; top:8cqw; transform:translateX(-50%); text-align:center; width:14cqw}
+.node-lbl b{display:block; font-size:1.2cqw; letter-spacing:-.02em}
+.node-lbl span{font-family:var(--mono); font-size:.75cqw; font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--faint)}
+.gaps{display:grid; grid-template-columns:repeat(4,1fr) .55fr repeat(2,1fr); gap:1.15cqw; margin-top:1.5cqw}
+.gap{padding:.85cqw .9cqw; min-height:8.6cqw}
+.gap.own{background:var(--paper-2); border:1px solid var(--e4)}
+.gap.wait{border:1px dashed var(--faint)}
+.gap b{display:block; font-size:.98cqw; line-height:1.2; letter-spacing:-.015em}
+.gap.wait b{color:var(--grey)}
+.gap p{margin:.5cqw 0 0; font-size:.78cqw; line-height:1.28; color:var(--grey)}
+.gap.wait p{color:var(--faint)}
+.gap-tags{display:grid; grid-template-columns:repeat(4,1fr) .55fr repeat(2,1fr);
+  gap:1.15cqw; margin-top:.6cqw}
+.gap-tags .lbl:first-child{grid-column:1 / 5}
+.gap-tags .lbl:last-child{grid-column:6 / 8}
+.two-up{display:flex; justify-content:space-between; align-items:flex-end;
+  gap:3cqw; border-top:1px solid var(--rule); margin-top:auto; padding-top:1.1cqw}
+.two-up p{margin:0; font-size:1.12cqw; line-height:1.35; color:var(--ink-soft)}
+.two-up p.hi{color:var(--ink); font-weight:700; text-align:right}
+
+/* ---------- S8 · biểu đồ ---------- */
+.charts{display:grid; grid-template-columns:1fr 1fr; gap:2.4cqw;
+  flex:0 0 auto; height:26cqw; min-height:0}
+.chart{display:flex; flex-direction:column; min-height:0; overflow:hidden}
+/* SVG co vừa khung (preserveAspectRatio mặc định) — không tràn đè khối dưới */
+.chart svg{width:100%; flex:1 1 0; min-height:0; display:block}
+/* SVG không nhận var() trong presentation attribute → tô bằng CSS */
+.chart .grid line{stroke:var(--grat); stroke-width:1}
+.chart text{font-family:var(--sans)}
+.chart .ax text{font-family:var(--mono); font-size:10px; fill:var(--faint)}
+.chart .cat text{font-size:12px; fill:var(--grey)}
+.chart .val text{font-size:11px; font-weight:700; fill:var(--ink)}
+.chart .val text.dn{fill:var(--risk-high)}
+.chart .b25{fill:var(--e2)} .chart .b26{fill:var(--e5)} .chart .bdn{fill:var(--risk-high)}
+.chart .cal rect{fill:var(--risk-bg); stroke:var(--risk-high)}
+.chart .cal text{font-family:var(--mono); font-size:11px; font-weight:700; fill:var(--risk-high)}
+.chart .band{fill:var(--route); opacity:.08}
+.chart .l25{fill:none; stroke:var(--faint); stroke-width:2.2}
+.chart .l26{fill:none; stroke:var(--route); stroke-width:2.6}
+.chart .d25{fill:var(--faint)} .chart .d26{fill:var(--route)}
+.chart .peak{font-size:12px; font-weight:700; fill:var(--route)}
+.chart .lbl{display:block; margin-top:.7cqw; flex:none}
+.legend{display:flex; gap:1.4cqw; margin-bottom:.5cqw; flex:none}
+.legend span{display:inline-flex; align-items:center; gap:.42cqw;
+  font-family:var(--mono); font-size:.75cqw; font-weight:700; color:var(--grey)}
+.legend i{width:.85cqw; height:.85cqw; display:block}
+.people{display:grid; grid-template-columns:1fr 1fr; gap:0 3cqw; flex:0 0 auto;
+  border-top:1px solid var(--rule); margin-top:.9cqw; padding-top:.9cqw}
+.people > div{min-width:0; overflow-wrap:break-word}
+.people > div + div{border-left:1px solid var(--rule); padding-left:3cqw}
+.grow{margin:.45cqw 0 0; padding:0; list-style:none}
+.grow li{display:grid; grid-template-columns:4.6cqw 1fr; gap:.9cqw;
+  align-items:baseline; margin-bottom:.5cqw}
+.grow b{font-size:1.6cqw; color:var(--e5); letter-spacing:-.025em; text-align:right}
+.grow span{font-size:.85cqw; line-height:1.4; color:var(--ink-soft)}
+.grow span i{display:block; font-style:normal; color:var(--grey); font-size:.78cqw; margin-top:.15cqw}
+.skill{margin:.45cqw 0 0; padding:0; list-style:none}
+.skill li{font-size:.86cqw; line-height:1.4; color:var(--ink-soft);
+  padding-left:1.4cqw; position:relative; margin-bottom:.42cqw}
+.skill li::before{content:""; position:absolute; left:0; top:.6cqw; width:.75cqw;
+  height:0; border-top:1px solid var(--route)}
+.skill li b{color:var(--ink)}
+.target{margin-top:.45cqw; padding:.5cqw .8cqw; background:var(--paper-2);
+  border-left:.3cqw solid var(--e5); font-size:.88cqw; color:var(--ink)}
+.target b{color:var(--e5)}
+
+/* ============================================================ NAV */
+.navbar{
+  flex:0 0 auto; display:flex; align-items:center; gap:1.1rem;
+  padding:.7rem 1.1rem; background:var(--paper);
+  border-top:1px solid var(--rule);
+}
+.nav-btn{
+  width:2.15rem; height:2.15rem; display:grid; place-items:center; flex:none;
+  background:none; border:1px solid var(--rule); border-radius:.35rem;
+  color:var(--ink-soft); cursor:pointer;
+}
+.nav-btn:hover:not(:disabled){border-color:var(--route); color:var(--route)}
+.nav-btn:disabled{opacity:.35; cursor:default}
+.nav-btn svg{width:1.05rem; height:1.05rem; fill:none; stroke:currentColor; stroke-width:1.8}
+.pips{display:flex; gap:.3rem; margin:0; padding:0; list-style:none;
+  flex:1 1 auto; min-width:0; overflow-x:auto; scrollbar-width:none}
+.pips::-webkit-scrollbar{display:none}
+.pip{
+  display:flex; flex-direction:column; gap:.22rem; align-items:flex-start;
+  padding:.34rem .58rem; min-width:5.4rem; flex:1 1 0;
+  background:none; border:1px solid transparent; border-radius:.35rem;
+  font-family:var(--mono); cursor:pointer; text-align:left; color:var(--faint);
+}
+.pip:hover{background:var(--paper-2); color:var(--ink-soft)}
+.pip u{width:100%; height:2px; background:var(--grat); display:block; text-decoration:none}
+.pip em{font-size:.6rem; font-style:normal; font-weight:700; letter-spacing:.09em;
+  text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%}
+.pip[aria-current="true"]{color:var(--route)}
+.pip[aria-current="true"] u{background:var(--route)}
+.nav-meta{display:flex; align-items:baseline; gap:.8rem; flex:none; padding-left:.3rem}
+.nav-meta b{font-size:.82rem; font-weight:600; color:var(--ink); white-space:nowrap}
+.nav-meta span{font-family:var(--mono); font-size:.72rem; color:var(--faint);
+  font-variant-numeric:tabular-nums}
+@media (max-width:820px){
+  .nav-meta b{display:none}
+  .pip em{display:none}
+  .pip{min-width:1.6rem; padding:.5rem .3rem}
+}
+
+/* ============================================================ PRINT */
+@media print{
+  @page{size:landscape; margin:0}
+  body{background:#fff; display:block}
+  .navbar{display:none}
+  .viewport{display:block; padding:0}
+  .stage{width:100%; border:0; aspect-ratio:auto}
+  .slide{display:flex !important; position:relative; inset:auto;
+    height:100vh; break-after:page; break-inside:avoid}
+}
+</style>
+
+<div class="viewport">
+<div class="stage" id="stage">
+
+  <!-- ══════════════════════════════════════════ 01 · MỞ ĐẦU -->
+  <section class="slide cover" data-title="Mở đầu" data-active>
+    <div class="stripe" aria-hidden="true"></div>
+    <h1>Báo cáo 1H/2026<br>&amp; Định hướng 2H</h1>
+    <p class="sub">Trung tâm Giám sát và Đảm bảo Dịch vụ — SCC</p>
+    <div class="rule"></div>
+    <p class="sheet">Kỳ báo cáo: 01–06/2026 &nbsp;·&nbsp; Phạm vi: 4 phòng · 90 nhân sự &nbsp;·&nbsp; Người tham dự: toàn thể SCC</p>
+  </section>
+
+  <!-- ══════════════════════════════════════════ 02 · OKRs -->
+  <section class="slide" data-title="OKRs">
+    <div class="head">
+      <span class="anno">§01 · Kết quả &amp; Mục tiêu OKRs</span>
+      <span class="pres">Trình bày · TanHV3</span>
+    </div>
+    <h2>Kết quả 1H → Mục tiêu Q3 · Q4</h2>
+    <div class="rule full"></div>
+    <div class="body">
+      <p class="result">
+        <b>7/7</b>
+        <span>KR có mục tiêu 1H đều đạt kế hoạch — <b class="pc">100%</b><br>
+        <em>Các mục tiêu mới chỉ thực hiện trong 2H hiển thị mờ</em></span>
+      </p>
+      <table class="okr">
+        <colgroup><col style="width:22.5%"><col style="width:4%"><col style="width:36.5%"><col style="width:37%"></colgroup>
+        <thead><tr><th>KR</th><th style="text-align:center">1H</th><th>Q3/2026</th><th>Q4/2026</th></tr></thead>
+        <tbody>
+          <tr><td class="kr">KR1.2 · Chứng chỉ bảo mật CREST</td><td class="st">✓</td>
+              <td class="q3">Interview + được cấp chứng chỉ CREST cho dịch vụ SOC</td><td class="q4">—</td></tr>
+          <tr><td class="kr">KR2.1/2.2 · Proactive Network Observability</td><td class="st">✓</td>
+              <td class="q3">Lên production · 4 tính năng debug L2+ · 80% ticket logic, giảm 20% thời gian</td>
+              <td class="q4">AI cho 3 use case · 90% ticket logic, giảm 30% thời gian</td></tr>
+          <tr class="off"><td class="kr">KR3.1 · AI phân tích hạ tầng trong 5 phút</td><td class="st na">—</td>
+              <td class="q3">≥ 2 dashboard: chất lượng hạ tầng FTEL + vận hành VoIP</td><td class="q4">—</td></tr>
+          <tr><td class="kr">KR4.1 · Tự động hóa ticket HT / KH</td><td class="st">✓</td>
+              <td class="q3">Nền tảng Module xử lý HTKT trên HPCN</td>
+              <td class="q4">Go-live ≥ 50% ticket nhóm “Lỗi dịch vụ”</td></tr>
+          <tr class="off"><td class="kr">KR4.2 · Change Management</td><td class="st"></td>
+              <td class="q3">Hệ thống CM tập trung, giảm ≥ 50% thời gian xử lý kế hoạch</td>
+              <td class="q4">Workflow Automation + AI gợi ý, giảm ≥ 70%</td></tr>
+          <tr><td class="kr">KR5.1 · Add-on service VoIP</td><td class="st">✓</td>
+              <td class="q3">≥ 2 ý tưởng add-on · thương mại hóa MVP 1H cho ≥ 5 KHG</td>
+              <td class="q4">MVP ≥ 1 ý tưởng đã duyệt · nghiên cứu ≥ 1 sản phẩm mới</td></tr>
+          <tr><td class="kr">KR5.2 · Voice Brandname liên mạng</td><td class="st">✓</td>
+              <td class="q3">Test thành công 3/3 Telcos, có HA/DR 2 miền</td>
+              <td class="q4">Hoàn thành VBR 3/3 Telcos · ≥ 10 KHG mới</td></tr>
+          <tr><td class="kr">KR6.1 · Năng lực nhân sự</td><td class="st">✓</td>
+              <td class="q3">28% V-shaped · 14% Pi-shaped</td>
+              <td class="q4">21% V-shaped · 21% Pi-shaped (18 + 18 người)</td></tr>
+          <tr><td class="kr">KR7.1 · SOP — đơn hàng có vết Online</td><td class="st">✓✓</td>
+              <td class="q3">200k · AI Agentic trên SOP · Engage to earn cho IBB toàn quốc</td>
+              <td class="q4">300k · mở rộng sang bài toán CSKH</td></tr>
+        </tbody>
+      </table>
+      <div class="okr-foot">
+        <span class="lbl">✓ đạt mục tiêu quý &nbsp;&nbsp;&nbsp; Đạt mục tiêu 1H</span>
+        <div class="stats">
+          <div class="stat"><b>3/3</b><span>Telcos</span></div>
+          <div class="stat"><b>200k → 300k</b><span>Đơn có vết Online</span></div>
+          <div class="stat"><b>21% + 21%</b><span>V-shaped · Pi-shaped</span></div>
+        </div>
+      </div>
+    </div>
+    <span class="pg">02 / 09</span>
+  </section>
+
+  <!-- ══════════════════════════════════════════ 03 · VOICE -->
+  <section class="slide" data-title="Dịch vụ Voice">
+    <div class="head">
+      <span class="anno">§02 · Dịch vụ Voice</span>
+      <span class="pres">Trình bày · ThucPT3</span>
+    </div>
+    <h2>Ba hạng mục chậm — nút thắt đều nằm ngoài SCC</h2>
+    <div class="rule full"></div>
+    <div class="body">
+      <div class="mx">
+        <div></div>
+        <div class="mx-h">VBR liên mạng</div>
+        <div class="mx-h">Add-on service</div>
+        <div class="mx-h">Automation Tool HTKT Core VoIP</div>
+
+        <span class="lbl mx-r">Hiện trạng</span>
+        <div class="cell now">VBR liên mạng với Viettel, Vinaphone còn vướng mắc quy trình hợp tác và hạ tầng kỹ thuật</div>
+        <div class="cell now">Tính năng Dashboard/Portal của VAS Platform chưa chạy được lên Onmember</div>
+        <div class="cell now">Tích hợp Core VoIP và FTMS còn chậm, nhiều thiếu sót</div>
+
+        <span class="lbl mx-r">Nguyên nhân</span>
+        <div class="cell why">Phụ thuộc quy trình hợp tác và hạ tầng kỹ thuật của đối tác nhà mạng
+          <span class="who">Viettel · Vinaphone · Cục</span></div>
+        <div class="cell why">Khách hàng chưa sắp xếp được UAT
+          <span class="who">KHG</span></div>
+        <div class="cell why">Thiếu nguồn lực phía đơn vị tích hợp
+          <span class="who">ISC</span></div>
+        <span class="lbl out-tag">Cả ba nguyên nhân đều ngoài tầm SCC</span>
+
+        <span class="lbl mx-r">Khắc phục</span>
+        <div class="cell fix">FTI trao đổi với Cục, xúc tiến hoàn tất ký kết hợp đồng với Viettel và đẩy nhanh hợp tác với Vinaphone qua giao thức SIP</div>
+        <div class="cell fix">FTI hoàn thiện UAT với KHG và thống nhất timeline triển khai với team Onmember</div>
+        <div class="cell fix">FTI request ISC bổ sung nguồn lực và thực hiện đầy đủ theo quy trình phát triển phần mềm</div>
+      </div>
+      <p class="closing">Không kiểm soát được tiến độ của họ — nhưng kiểm soát được việc có cam kết bằng văn bản hay không.</p>
+    </div>
+    <span class="pg">03 / 09</span>
+  </section>
+
+  <!-- ══════════════════════════════════════════ 04 · VẬN HÀNH -->
+  <section class="slide" data-title="Vận hành">
+    <div class="head">
+      <span class="anno">§03 · Dịch vụ Vận hành</span>
+      <span class="pres">Trình bày · QuyenPV8</span>
+    </div>
+    <h2>Khối lượng tăng nhanh hơn tốc độ trưởng thành của đội</h2>
+    <div class="rule full"></div>
+    <div class="body">
+      <span class="lbl sec-lbl">Hiện trạng</span>
+      <p class="now-box">
+        Còn các ca vụ trong vận hành <b>follow chưa chặt chẽ</b>, chưa chủ động trong tiến trình xử lý ticket.
+        Kiểm soát sự cố còn nhiều điểm chưa tốt, đặc biệt <b>nhóm sự cố lớn</b>.
+        Khối lượng HT đang lớn, peak nhiều nên chưa theo sát được từng ca vụ.
+      </p>
+
+      <span class="lbl sec-lbl">Nguyên nhân</span>
+      <div class="forces">
+        <div class="arrow r"><span>Khối lượng · độ khó · số dịch vụ handle</span></div>
+        <div class="arrow l"><span>Nhân sự mới nhiều, chưa có kinh nghiệm</span></div>
+        <div class="zone" aria-hidden="true"><b>Nơi ca vụ bị lọt</b></div>
+        <ul class="why-list">
+          <li><b>1</b>Số dịch vụ vận hành đang handle lớn — đã tự động hóa nhiều nhưng vẫn đòi hỏi xử lý nhanh, đặc biệt các sự cố lớn</li>
+          <li><b>2</b>Khối lượng HT ngày càng lớn, độ khó cao</li>
+          <li><b>3</b>Nhân sự mới nhiều và chưa có kinh nghiệm</li>
+        </ul>
+        <div class="evi" style="top:8.9cqw">
+          <b>Đội Vận hành 37 → 48 người</b>
+          <p>1H2025 → 1H2026 · +11 người, trong đó 4 người bổ sung tháng 7</p>
+        </div>
+      </div>
+
+      <span class="lbl sec-lbl">Khắc phục</span>
+      <div class="levers">
+        <div class="lever">
+          <h3>GenPI — nâng chất lượng nguồn lực</h3>
+          <p>HTKT L1: 4 V-shaped + 10 Pi-shaped &nbsp;·&nbsp; PM L1: 2 V-shaped &nbsp;·&nbsp; Sys operator L1: 4 V-shaped<br>
+             Đẩy nhanh tốc độ đào tạo, tăng khối lượng thực chiến, sắp xếp công việc thực tế ngay sau thực chiến</p>
+        </div>
+        <div class="lever">
+          <h3>AI — dứt điểm phần tồn đọng</h3>
+          <p>Tập trung cao độ ứng dụng AI vào giải quyết nốt các điểm tồn đọng còn lại:<br>HT &nbsp;·&nbsp; KH &nbsp;·&nbsp; SCL</p>
+        </div>
+      </div>
+    </div>
+    <span class="pg">04 / 09</span>
+  </section>
+
+  <!-- ══════════════════════════════════════════ 05 · TIÊU CHUẨN DỊCH VỤ -->
+  <section class="slide" data-title="Tiêu chuẩn DV">
+    <div class="head">
+      <span class="anno">§04 · Tiêu chuẩn dịch vụ</span>
+      <span class="pres">Trình bày · TanHV3</span>
+    </div>
+    <h2>Mới kiểm soát được phần nổi trên ticket</h2>
+    <div class="rule full"></div>
+    <div class="body">
+      <div class="cover-wrap">
+        <div>
+          <div style="border-top:1.5px dashed var(--route); margin-bottom:.35cqw"></div>
+          <span class="lbl rt">Mục tiêu 2H · kiểm soát 100%</span>
+          <div class="cols" style="margin-top:.7cqw">
+            <div class="col">
+              <div class="bar" role="img" aria-label="Vận hành: phủ 55% — phần trên ticket; 45% còn hở là phần ngoài ticket">
+                <div class="empty" style="flex:45">ngoài ticket</div>
+                <div class="fill" style="flex:55">trên ticket</div>
+              </div>
+              <b>Vận hành</b>
+            </div>
+            <div class="col">
+              <div class="bar" role="img" aria-label="VoIP: mới chạm 15%, phần lớn chưa kiểm soát sâu">
+                <div class="empty" style="flex:85">chưa sâu</div>
+                <div class="fill" style="flex:15">mới chạm</div>
+              </div>
+              <b>VoIP</b>
+            </div>
+            <div class="col">
+              <div class="cells" role="img" aria-label="Dự án: kiểm soát 2 trên 7 dự án trung tâm">
+                <i></i><i></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i>
+              </div>
+              <b>Dự án</b>
+            </div>
+          </div>
+          <div class="anchor"><b>2/7</b><span>Dự án trung tâm đang kiểm soát</span></div>
+        </div>
+        <div class="side">
+          <span class="lbl">Hiện trạng</span>
+          <ul class="plain">
+            <li><b>·</b>Kiểm soát <strong>chưa phủ hết 100%</strong> — chỉ kiểm soát các hạng mục trên ticket; các mục ngoài ticket chưa được kiểm soát nên nhiều ca vụ phòng Dịch vụ không nắm bắt kịp thời</li>
+            <li><b>·</b>Mảng <strong>VoIP</strong> và <strong>Dự án</strong> mới bắt đầu kiểm soát nhưng chưa sâu — hiện chỉ 2/7 dự án trung tâm theo checklist mới</li>
+          </ul>
+
+          <span class="lbl">Nguyên nhân</span>
+          <ul class="plain">
+            <li><b>1</b>Phụ thuộc nhiều vào con người, chưa có nguồn lưu trữ các dữ liệu ngoài ticket</li>
+            <li><b>2</b>Nhân sự có chuyên môn chưa sâu về các mảng khác như VoIP, Dự án</li>
+          </ul>
+
+          <span class="lbl">Khắc phục</span>
+          <ul class="plain">
+            <li><b>1</b>Xây dựng các workflow, tích hợp thêm với <strong>email · fchat · call</strong> để kiểm soát toàn diện các hoạt động vận hành
+              <em>Cần R&amp;D hỗ trợ tư vấn về tool, công cụ và hỗ trợ sâu hơn về code</em></li>
+            <li><b>2</b>Nhân sự đã đào tạo VoIP và Dự án qua GenPi → 2H đẩy mạnh áp dụng thực tế, mở rộng số dự án kiểm soát
+              <em>Các phòng ban phối hợp cùng Dịch vụ phân tích vấn đề để đưa ra phương án tối ưu</em></li>
+          </ul>
+
+          <span class="lbl">Định hướng 2H</span>
+          <ul class="goals">
+            <li>Kiểm soát 100% hoạt động SCC — Vận hành · VoIP · Dự án</li>
+            <li>Tối thiểu 2 cải tiến cho chi nhánh, khu vực kinh doanh</li>
+            <li>Nghiên cứu và chọn tối thiểu 2 tiêu chuẩn cho 2 dịch vụ mới</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <span class="pg">05 / 09</span>
+  </section>
+
+  <!-- ══════════════════════════════════════════ 06 · AI HIỆN TRẠNG -->
+  <section class="slide" data-title="AI · Hiện trạng">
+    <div class="head">
+      <span class="anno">§05 · AI &amp; R&amp;D — Hiện trạng</span>
+      <span class="pres">Trình bày · QuyDT7</span>
+    </div>
+    <h2>Đang ở Cấp 2, mới đạt 44% tiêu chí Cấp 3</h2>
+    <div class="rule full"></div>
+    <div class="body">
+      <div class="casan">
+        <div>
+          <div class="pins">
+            <span class="chip solid" style="left:30%; top:0">Đang ở đây</span>
+            <span class="chip rt" style="left:50%; top:0">Đích Q3</span>
+          </div>
+          <div class="steps" role="img" aria-label="Thang CASAN 5 cấp, cao dần: Cấp 1 đến Cấp 5. SCC đang ở Cấp 2, đích quý 3 là Cấp 3.">
+            <i class="s1"></i><i class="s2"></i><i class="s3"></i><i class="s4"></i><i class="s5"></i>
+          </div>
+          <div class="step-lbl">
+            <span>Cấp 1</span><span class="now">Cấp 2</span><span>Cấp 3</span><span>Cấp 4</span><span>Cấp 5</span>
+          </div>
+          <span class="lbl" style="display:block; margin-top:1cqw">Thang CASAN — 5 cấp độ trưởng thành AI</span>
+        </div>
+        <div style="border-left:1px solid var(--rule); padding-left:3cqw">
+          <div class="gap-row">
+            <b class="big">44%</b>
+            <p>trung bình 8 tiêu chí của Cấp 3<br>(Augmented → Systemic)</p>
+          </div>
+          <div class="meter" role="img" aria-label="Thanh đo: đã đạt 44% tiêu chí Cấp 3, còn thiếu 56%">
+            <i></i><u></u>
+          </div>
+          <span class="lbl">Bốn nút thắt đằng sau con số</span>
+          <ul class="knots">
+            <li><b>1</b><span>Kỹ năng dùng AI chưa đồng bộ, chưa chia sẻ rộng rãi trong SCC</span><span></span></li>
+            <li><b>2</b><span>Chưa có quy tắc chung để kiểm tra lại kết quả AI có đúng không</span><span></span></li>
+            <li><b>3</b><span>AI đã chạy thật ngoài vận hành nhưng chưa ghi nhận hiệu quả vào đâu</span><span></span></li>
+            <li class="out"><b>4</b><span>Quy định dùng AI chờ công ty ban hành · thiếu người</span>
+                <span class="chip ghost">Ngoài tầm</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="punch">Thứ SCC thiếu không phải AI. Thiếu là cách quản lý và chứng minh việc dùng AI.</p>
+    </div>
+    <span class="pg">06 / 09</span>
+  </section>
+
+  <!-- ══════════════════════════════════════════ 07 · AI LỘ TRÌNH -->
+  <section class="slide" data-title="AI · Lộ trình">
+    <div class="head">
+      <span class="anno">§06 · AI &amp; R&amp;D — Lộ trình 2H</span>
+      <span class="pres">Trình bày · QuyDT7</span>
+    </div>
+    <h2>Cấp 2 → Cấp 3 (Q3) → Cấp 4 (Q4)</h2>
+    <div class="rule full"></div>
+    <div class="body">
+      <div class="track">
+        <div class="ms" style="left:5.5%"><b>T08</b><p>Ra mắt SCC AI Atlas — quản trị tập trung</p></div>
+        <div class="ms" style="left:37%"><b>T09</b><p>AI vào quy trình vận hành &amp; phát triển sản phẩm ·<br>AI-First culture · đánh giá CASAN có bằng chứng</p></div>
+        <div class="ms" style="left:73%"><b>T10–12</b><p>Luồng tự động hóa hoàn toàn bằng AI Agents</p></div>
+        <div class="road" aria-hidden="true">
+          <i style="left:2.5%; width:44%"></i>
+          <i class="dash" style="left:46.5%; width:51%"></i>
+        </div>
+        <span class="node on" style="left:2.5%"></span>
+        <span class="node on" style="left:46.5%"></span>
+        <span class="node" style="left:97.5%"></span>
+        <div class="node-lbl" style="left:2.5%"><b>Cấp 2</b><span>đang ở đây</span></div>
+        <div class="node-lbl" style="left:46.5%"><b>Cấp 3</b><span>Quý 3</span></div>
+        <div class="node-lbl" style="left:97.5%"><b>Cấp 4</b><span>Quý 4</span></div>
+      </div>
+      <span class="lbl" style="margin-top:1.2cqw">Sáu thứ còn thiếu</span>
+      <div class="gaps">
+        <div class="gap own"><b>Use Case Catalog</b><p>Việc nào đang dùng AI — có người phụ trách và KPI</p></div>
+        <div class="gap own"><b>Prompt / Agent Library</b><p>Thư viện chia sẻ rộng rãi, dùng lại được</p></div>
+        <div class="gap own"><b>AI Metrics</b><p>Chỉ số đo AI mang lại lợi ích gì</p></div>
+        <div class="gap own"><b>AI Review Rhythm</b><p>Nhịp review lại việc dùng AI mỗi 2 tuần</p></div>
+        <div></div>
+        <div class="gap wait"><b>AI Governance</b><p>Ai được dùng AI vào việc gì</p></div>
+        <div class="gap wait"><b>Data Classification</b><p>Dữ liệu nào được đưa cho AI</p></div>
+      </div>
+      <div class="gap-tags">
+        <span class="lbl up">SCC tự làm được</span>
+        <span class="lbl">Chờ công ty ban hành</span>
+      </div>
+      <div class="two-up">
+        <p>Cấp 4 không phải là “có nhiều Agent”<br>— mà là Agent chạy có người kiểm soát được.</p>
+        <p class="hi">Mục tiêu 2H: chứng minh SCC đứng vững ở Cấp 3,<br>và có luồng tự động hóa chạy ở Cấp 4.</p>
+      </div>
+    </div>
+    <span class="pg">07 / 09</span>
+  </section>
+
+  <!-- ══════════════════════════════════════════ 08 · CON NGƯỜI -->
+  <section class="slide" data-title="Con người">
+    <div class="head">
+      <span class="anno">§07 · Con người &amp; Tổ chức</span>
+      <span class="pres">Trình bày · QuyDT7</span>
+    </div>
+    <h2>Đội đông hơn, năng suất cao hơn — nhưng lệch chỗ</h2>
+    <div class="rule full"></div>
+    <div class="body">
+      <div class="charts">
+        <div class="chart">
+          <div class="legend">
+            <span><i style="background:var(--e2)"></i>1H2025</span>
+            <span><i style="background:var(--e5)"></i>1H2026</span>
+            <span><i style="background:var(--risk-high)"></i>Giảm</span>
+          </div>
+          <svg viewBox="0 0 480 250" role="img" aria-label="Cơ cấu nhân sự bốn phòng, 1H2025 so với 1H2026: Vận hành 37 lên 48; VoIP giữ 7; R&D giảm từ 33 xuống 28; Dịch vụ giữ 7. Tổng 84 lên 90.">
+            <g class="grid">
+              <line x1="34" y1="220" x2="474" y2="220"/><line x1="34" y1="182.9" x2="474" y2="182.9"/>
+              <line x1="34" y1="145.8" x2="474" y2="145.8"/><line x1="34" y1="108.7" x2="474" y2="108.7"/>
+              <line x1="34" y1="71.6" x2="474" y2="71.6"/><line x1="34" y1="34.5" x2="474" y2="34.5"/>
+            </g>
+            <g class="ax" text-anchor="end">
+              <text x="27" y="223">0</text><text x="27" y="186">10</text><text x="27" y="149">20</text>
+              <text x="27" y="112">30</text><text x="27" y="75">40</text><text x="27" y="38">50</text>
+            </g>
+            <g>
+              <rect class="b25" x="51"  y="82.8"  width="36" height="137.2"/>
+              <rect class="b26" x="91"  y="42"    width="36" height="178"/>
+              <rect class="b25" x="160" y="194.0" width="36" height="26"/>
+              <rect class="b26" x="200" y="194.0" width="36" height="26"/>
+              <rect class="b25" x="269" y="97.6"  width="36" height="122.4"/>
+              <rect class="bdn" x="309" y="116.1" width="36" height="103.9"/>
+              <rect class="b25" x="378" y="194.0" width="36" height="26"/>
+              <rect class="b26" x="418" y="194.0" width="36" height="26"/>
+            </g>
+            <g class="val" text-anchor="middle">
+              <text x="69" y="76">37</text><text x="109" y="36">48</text>
+              <text x="178" y="188">7</text><text x="218" y="188">7</text>
+              <text x="287" y="91">33</text><text class="dn" x="327" y="110">28</text>
+              <text x="396" y="188">7</text><text x="436" y="188">7</text>
+            </g>
+            <g class="cat" text-anchor="middle">
+              <text x="88" y="240">Vận hành</text><text x="197" y="240">VoIP</text>
+              <text x="306" y="240">R&amp;D</text><text x="415" y="240">Dịch vụ</text>
+            </g>
+            <g class="cal" transform="translate(258,24)">
+              <rect x="0" y="0" width="96" height="21" rx="10.5"/>
+              <text x="48" y="14.5" text-anchor="middle">R&amp;D  −5</text>
+            </g>
+          </svg>
+          <span class="lbl">Cơ cấu nhân sự · 1H2025 → 1H2026 · tổng 84 → 90</span>
+        </div>
+
+        <div class="chart">
+          <div class="legend">
+            <span><i style="background:var(--faint)"></i>2025</span>
+            <span><i style="background:var(--route)"></i>2026</span>
+          </div>
+          <svg viewBox="0 0 480 250" role="img" aria-label="Năng suất theo tháng, phần trăm. Năm 2025: 120, 120, 124, 121, 123, 127. Năm 2026: 120, 126, 137, 130, 132, 142. Đường 2026 luôn nằm trên và nới rộng dần tới tháng 6.">
+            <g class="grid">
+              <line x1="40" y1="220" x2="474" y2="220"/><line x1="40" y1="169" x2="474" y2="169"/>
+              <line x1="40" y1="118" x2="474" y2="118"/><line x1="40" y1="67" x2="474" y2="67"/>
+              <line x1="40" y1="16" x2="474" y2="16"/>
+            </g>
+            <g class="ax" text-anchor="end">
+              <text x="33" y="223">110</text><text x="33" y="172">120</text><text x="33" y="121">130</text>
+              <text x="33" y="70">140</text><text x="33" y="19">150</text>
+            </g>
+            <polygon class="band" points="40,169 126,169 212,148.6 298,163.9 384,153.7 470,133.3 470,56.8 384,107.8 298,118 212,82.3 126,138.4 40,169"/>
+            <polyline class="l25" points="40,169 126,169 212,148.6 298,163.9 384,153.7 470,133.3"/>
+            <polyline class="l26" points="40,169 126,138.4 212,82.3 298,118 384,107.8 470,56.8"/>
+            <g class="d25">
+              <circle cx="40" cy="169" r="3.2"/><circle cx="126" cy="169" r="3.2"/><circle cx="212" cy="148.6" r="3.2"/>
+              <circle cx="298" cy="163.9" r="3.2"/><circle cx="384" cy="153.7" r="3.2"/><circle cx="470" cy="133.3" r="3.2"/>
+            </g>
+            <g class="d26">
+              <circle cx="40" cy="169" r="3.6"/><circle cx="126" cy="138.4" r="3.6"/><circle cx="212" cy="82.3" r="3.6"/>
+              <circle cx="298" cy="118" r="3.6"/><circle cx="384" cy="107.8" r="3.6"/><circle cx="470" cy="56.8" r="4.6"/>
+            </g>
+            <text class="peak" x="470" y="46" text-anchor="end">142%</text>
+            <g class="cat" text-anchor="middle">
+              <text x="40" y="240">T1</text><text x="126" y="240">T2</text><text x="212" y="240">T3</text>
+              <text x="298" y="240">T4</text><text x="384" y="240">T5</text><text x="470" y="240">T6</text>
+            </g>
+          </svg>
+          <span class="lbl">Năng suất theo tháng (%) · mục tiêu 2H: +30% so với 2025</span>
+        </div>
+      </div>
+      <div class="people">
+        <div>
+          <span class="lbl">Tăng trưởng nhân sự 2H</span>
+          <ul class="grow">
+            <li><b>+4</b><span>Nhân sự vận hành SOC <i>(đã bổ sung tháng 7)</i> + phát triển 1 vị trí Senior vận hành SOC
+              <i>→ phục vụ 100% mở rộng khách hàng vận hành SOC trong 2H2026</i></span></li>
+            <li><b>+3</b><span>Tuyển bổ sung BA · SYSTEM · DEV — tháng 07–08/2026
+              <i>→ giảm tải áp lực về chất lượng và tiến độ phát triển các hệ thống dịch vụ</i></span></li>
+          </ul>
+        </div>
+        <div>
+          <span class="lbl">Nâng cao năng lực đội ngũ</span>
+          <ul class="skill">
+            <li><b>Đẩy nhanh tốc độ đào tạo GenPI</b>, tăng khối lượng thực chiến, sắp xếp công việc thực tế ngay sau thực chiến</li>
+            <li><b>Học và ứng dụng triệt để các công cụ AI</b> trong hoạt động vận hành và phát triển sản phẩm</li>
+            <li><b>Học, thi các chứng chỉ chuyên môn mới</b> đáp ứng cho các dịch vụ mới — SOC · QA Security</li>
+          </ul>
+          <p class="target">Mục tiêu Q4: <b>21% V-shaped (18 người)</b> + <b>21% Pi-shaped (18 người)</b></p>
+        </div>
+      </div>
+    </div>
+    <span class="pg">08 / 09</span>
+  </section>
+
+  <!-- ══════════════════════════════════════════ 09 · KẾT THÚC -->
+  <section class="slide cover" data-title="Kết thúc">
+    <div class="stripe" aria-hidden="true"></div>
+    <h1>Câu hỏi &amp; trao đổi</h1>
+    <div class="rule"></div>
+    <p class="sheet">Trung tâm Giám sát và Đảm bảo Dịch vụ — SCC &nbsp;·&nbsp; 1H/2026</p>
+  </section>
+
+</div>
+</div>
+
+<nav class="navbar" aria-label="Điều hướng slide">
+  <button class="nav-btn" id="prev" aria-label="Slide trước">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <ol class="pips" id="pips"></ol>
+  <button class="nav-btn" id="next" aria-label="Slide kế tiếp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <div class="nav-meta"><b id="navTitle"></b><span id="navCount"></span></div>
+  <button class="nav-btn" id="theme" aria-label="Đổi giao diện sáng / tối">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="4.2"/>
+      <path d="M12 2.4v2.2M12 19.4v2.2M2.4 12h2.2M19.4 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6" stroke-linecap="round"/>
+    </svg>
+  </button>
+</nav>
+
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var pips = document.getElementById('pips');
+  var prev = document.getElementById('prev');
+  var next = document.getElementById('next');
+  var navTitle = document.getElementById('navTitle');
+  var navCount = document.getElementById('navCount');
+  var i = 0;
+
+  slides.forEach(function (s, n) {
+    var li = document.createElement('li');
+    li.style.display = 'contents';
+    var b = document.createElement('button');
+    b.className = 'pip';
+    b.type = 'button';
+    b.setAttribute('aria-label', 'Slide ' + (n + 1) + ' · ' + s.dataset.title);
+    b.innerHTML = '<u></u><em>' + String(n + 1).padStart(2, '0') + ' ' + s.dataset.title + '</em>';
+    b.addEventListener('click', function () { go(n); });
+    li.appendChild(b);
+    pips.appendChild(li);
+  });
+  var buttons = Array.prototype.slice.call(pips.querySelectorAll('.pip'));
+
+  function go(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, k) {
+      if (k === i) { s.setAttribute('data-active', ''); } else { s.removeAttribute('data-active'); }
+    });
+    buttons.forEach(function (b, k) { b.setAttribute('aria-current', k === i ? 'true' : 'false'); });
+    prev.disabled = i === 0;
+    next.disabled = i === slides.length - 1;
+    navTitle.textContent = slides[i].dataset.title;
+    navCount.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+    if (location.hash !== '#' + (i + 1)) { history.replaceState(null, '', '#' + (i + 1)); }
+    buttons[i].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  }
+
+  prev.addEventListener('click', function () { go(i - 1); });
+  next.addEventListener('click', function () { go(i + 1); });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.target instanceof Element && e.target.closest('button') &&
+        (e.key === ' ' || e.key === 'Enter')) return;
+    switch (e.key) {
+      case 'ArrowRight': case 'PageDown': case ' ': go(i + 1); e.preventDefault(); break;
+      case 'ArrowLeft':  case 'PageUp':          go(i - 1); e.preventDefault(); break;
+      case 'Home': go(0); e.preventDefault(); break;
+      case 'End':  go(slides.length - 1); e.preventDefault(); break;
+    }
+  });
+
+  var theme = document.getElementById('theme');
+  theme.addEventListener('click', function () {
+    var cur = document.documentElement.getAttribute('data-theme');
+    var dark = cur ? cur === 'dark'
+                   : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', dark ? 'light' : 'dark');
+  });
+
+  var start = parseInt((location.hash || '').slice(1), 10);
+  go(isNaN(start) ? 0 : start - 1);
+})();
+</script>
