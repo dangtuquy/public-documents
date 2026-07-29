@@ -1,0 +1,474 @@
+<title>Kế hoạch ứng dụng AI — Trung tâm SCC · Q3–Q4/2026</title>
+
+<style>
+:root{
+  --e1:#E1EDFA; --e2:#ADCBEA; --e3:#79A9DB; --e4:#4587C8; --e5:#0465AF;
+  --route:#F37021; --check:#00A650;
+  --risk-high:#B3261E; --risk-med:#96660A;
+  --ink:#0F1C26; --ink-soft:#35485A; --grey:#5D7186; --faint:#93A6B6;
+  --grat:#DFE8EF; --rule:#D5E0E9; --paper:#FBFCFD; --paper-2:#F1F5F9;
+  --on-e5:#FFFFFF; --on-e1:#0F1C26;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono","Roboto Mono","DejaVu Sans Mono",Menlo,Consolas,monospace;
+  --wide:1500px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --e1:#222F3C; --e2:#2E4A67; --e3:#386695; --e4:#4584C2; --e5:#5AA3EC;
+    --route:#FF8A44; --check:#35C46F;
+    --risk-high:#F27A70; --risk-med:#E0AC4A;
+    --ink:#E6EEF6; --ink-soft:#B9C8D6; --grey:#8DA0B2; --faint:#5E7185;
+    --grat:#1D2A36; --rule:#263442; --paper:#0A121A; --paper-2:#101B25;
+    --on-e5:#06121D; --on-e1:#E6EEF6;
+  }
+}
+:root[data-theme="dark"]{
+  --e1:#222F3C; --e2:#2E4A67; --e3:#386695; --e4:#4584C2; --e5:#5AA3EC;
+  --route:#FF8A44; --check:#35C46F;
+  --risk-high:#F27A70; --risk-med:#E0AC4A;
+  --ink:#E6EEF6; --ink-soft:#B9C8D6; --grey:#8DA0B2; --faint:#5E7185;
+  --grat:#1D2A36; --rule:#263442; --paper:#0A121A; --paper-2:#101B25;
+  --on-e5:#06121D; --on-e1:#E6EEF6;
+}
+:root[data-theme="light"]{
+  --e1:#E1EDFA; --e2:#ADCBEA; --e3:#79A9DB; --e4:#4587C8; --e5:#0465AF;
+  --route:#F37021; --check:#00A650;
+  --risk-high:#B3261E; --risk-med:#96660A;
+  --ink:#0F1C26; --ink-soft:#35485A; --grey:#5D7186; --faint:#93A6B6;
+  --grat:#DFE8EF; --rule:#D5E0E9; --paper:#FBFCFD; --paper-2:#F1F5F9;
+  --on-e5:#FFFFFF; --on-e1:#0F1C26;
+}
+
+*{box-sizing:border-box}
+body{margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--sans); font-size:18px; line-height:1.5;
+  -webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--route); outline-offset:3px}
+h1,h2,h3,h4{margin:0; text-wrap:balance}
+p{margin:0}
+b{font-weight:650}
+
+.page{max-width:var(--wide); margin:0 auto; padding:34px 30px 46px;
+  display:flex; flex-direction:column; gap:30px}
+
+.anno{font-family:var(--mono); font-size:11.4px; font-weight:700;
+  letter-spacing:.15em; text-transform:uppercase; color:var(--faint)}
+.anno-r{color:var(--route)}
+.anno-c{color:var(--check)}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- đầu trang ---------- */
+.head{display:flex; flex-wrap:wrap; align-items:flex-end;
+  justify-content:space-between; gap:18px 30px;
+  border-bottom:2px solid var(--ink); padding-bottom:14px}
+.head h1{font-size:clamp(30px,3.5vw,43.2px); letter-spacing:-.032em;
+  line-height:1.06; max-width:20ch}
+.titleblock{display:flex; flex-direction:column; gap:7px}
+.sheet{display:flex; flex-wrap:wrap; border:1px solid var(--rule)}
+.sheet div{padding:7px 13px; border-right:1px solid var(--rule);
+  display:flex; flex-direction:column; gap:3px}
+.sheet div:last-child{border-right:0}
+.sheet b{font-family:var(--mono); font-size:15px; font-weight:700;
+  color:var(--ink); font-variant-numeric:tabular-nums}
+
+/* ---------- mục ---------- */
+.sec{display:flex; flex-direction:column; gap:13px}
+.sec-hd{display:flex; align-items:baseline; gap:13px; flex-wrap:wrap;
+  border-bottom:1px solid var(--rule); padding-bottom:8px}
+.sec-hd h2{font-size:clamp(22.8px,2.4vw,28.8px); letter-spacing:-.026em}
+.sec-hd .aim{margin-left:auto; font-family:var(--mono); font-size:12px;
+  font-weight:700; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--grey)}
+
+/* ---------- §01 điểm hạn chế ---------- */
+.probs{display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:1px; background:var(--rule); border:1px solid var(--rule)}
+@media (max-width:900px){.probs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.probs{grid-template-columns:1fr}}
+.prob{background:var(--paper); padding:13px 15px 15px;
+  display:flex; flex-direction:column; gap:8px}
+.prob .stat{font-family:var(--mono); font-size:36px; font-weight:700;
+  letter-spacing:-.035em; line-height:1; font-variant-numeric:tabular-nums;
+  color:var(--route)}
+.prob .stat.mid{color:var(--risk-med)}
+.prob h3{font-size:16px; font-weight:650; letter-spacing:-.016em;
+  line-height:1.3; margin-top:auto}
+
+/* ba điểm nghẽn — không có số, phân biệt bằng viền */
+.blocks-hd{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
+.blocks{display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:1px; background:var(--rule); border:1px solid var(--rule)}
+@media (max-width:760px){.blocks{grid-template-columns:1fr}}
+.blk{background:var(--paper); padding:12px 15px 14px;
+  border-left:3px solid var(--risk-high);
+  display:flex; flex-direction:column; gap:6px}
+.blk h3{font-size:16.6px; font-weight:650; letter-spacing:-.018em; line-height:1.3}
+.blk .src{font-family:var(--mono); font-size:10.8px; font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--grey);
+  align-self:flex-start; border:1px solid var(--rule); padding:1px 5px}
+
+/* ---------- thang CASAN thu gọn ---------- */
+.rungs{display:grid; grid-template-columns:repeat(5,1fr); gap:4px}
+@media (max-width:760px){.rungs{grid-template-columns:1fr}}
+.rung{border:1px solid var(--rule); padding:8px 10px 10px;
+  display:flex; flex-direction:column; gap:4px}
+.r1{background:var(--e1); color:var(--on-e1)}
+.r2{background:var(--e2); color:var(--on-e1)}
+.r3{background:var(--e5); border-color:var(--e5); color:var(--on-e5)}
+.r4{background:transparent; border-style:dashed; border-color:var(--e4)}
+.r5{background:transparent; border-style:dashed; border-color:var(--rule)}
+.r-n{font-family:var(--mono); font-size:11.4px; font-weight:700;
+  letter-spacing:.13em; text-transform:uppercase; opacity:.82}
+.r-nm{font-size:15.6px; font-weight:650; letter-spacing:-.018em; line-height:1.18}
+.r-here{align-self:flex-start; font-family:var(--mono); font-size:10.2px;
+  font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  padding:1px 5px; border:1px solid currentColor}
+.r4 .r-n,.r5 .r-n,.r4 .r-nm,.r5 .r-nm{color:var(--ink-soft)}
+
+/* ---------- §02 mục tiêu ---------- */
+.goals{display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:1px; background:var(--rule); border:1px solid var(--rule)}
+@media (max-width:900px){.goals{grid-template-columns:1fr}}
+.goal{background:var(--paper); padding:13px 16px 15px;
+  display:flex; flex-direction:column; gap:7px}
+.goal-1{background:var(--paper-2)}
+.goal-hd{display:flex; align-items:baseline; gap:9px; flex-wrap:wrap}
+.goal-id{font-family:var(--mono); font-size:15px; font-weight:700; color:var(--route)}
+.goal h3{font-size:18.6px; font-weight:650; letter-spacing:-.021em;
+  line-height:1.2; flex:1 1 130px}
+.goal-when{font-family:var(--mono); font-size:13.8px; font-weight:700;
+  font-variant-numeric:tabular-nums; border:1px solid var(--route); padding:1px 6px}
+.goal p{font-size:15.2px; line-height:1.44; color:var(--ink-soft)}
+.goal ul{margin:0; padding:0; list-style:none;
+  display:flex; flex-direction:column; gap:1px; background:var(--grat)}
+.goal li{background:var(--paper); padding:6px 0 6px 13px;
+  font-size:15.1px; line-height:1.38; color:var(--ink);
+  border-left:2px solid var(--e3)}
+.goal-1 li{border-left-color:var(--route)}
+.pri{align-self:flex-start; font-family:var(--mono); font-size:10.8px;
+  font-weight:700; letter-spacing:.11em; text-transform:uppercase;
+  padding:1px 6px; border:1px solid currentColor; color:var(--grey)}
+.pri-1{color:var(--route)}
+
+/* ---------- §03 cách làm ---------- */
+.how{display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:1px; background:var(--rule); border:1px solid var(--rule)}
+@media (max-width:900px){.how{grid-template-columns:1fr}}
+.hcol{background:var(--paper); padding:12px 15px 14px;
+  display:flex; flex-direction:column; gap:8px}
+.hcol-hd{display:flex; flex-direction:column; gap:4px}
+.hcol-hd h3{font-size:17.4px; font-weight:650; letter-spacing:-.021em; line-height:1.22}
+.hcol ul{margin:0; padding-left:16px; display:flex; flex-direction:column; gap:4px}
+.hcol li{font-size:14.9px; line-height:1.42; color:var(--ink-soft)}
+.hcol li b{color:var(--ink)}
+
+/* ---------- §04 roadmap ---------- */
+.rm-q{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); margin-bottom:-4px}
+.rm-q span{font-family:var(--mono); font-size:11.4px; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--grey);
+  padding:0 0 6px 10px; border-left:2px solid var(--e5)}
+.rm-q span:first-child{border-left-color:var(--rule)}
+
+.rm{display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:1px; background:var(--rule); border:1px solid var(--rule)}
+@media (max-width:1000px){.rm{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.rm{grid-template-columns:1fr}}
+.stage{background:var(--paper); display:flex; flex-direction:column}
+.stage-hd{padding:11px 15px 10px; display:flex; flex-direction:column; gap:3px;
+  min-height:90px; justify-content:flex-start}
+.s1 .stage-hd{background:var(--e1); color:var(--on-e1)}
+.s2 .stage-hd{background:var(--e3); color:var(--on-e1)}
+.s3 .stage-hd{background:var(--e4); color:var(--on-e5)}
+.s4 .stage-hd{background:var(--e5); color:var(--on-e5)}
+.stage-mo{font-family:var(--mono); font-size:12px; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase; opacity:.85}
+.stage-hd h3{font-size:18px; font-weight:650; letter-spacing:-.022em; line-height:1.18}
+
+.track{height:4px; border-top:3px solid var(--route); background:var(--paper-2)}
+
+.stage ul{margin:0; padding:11px 15px 0 31px;
+  display:flex; flex-direction:column; gap:5px}
+.stage li{font-size:14.6px; line-height:1.44; color:var(--ink-soft)}
+.stage li b{color:var(--ink)}
+.stage .out{margin-top:auto; padding:10px 15px 12px;
+  display:flex; gap:8px; align-items:baseline}
+.stage .out span:last-child{font-size:14.3px; line-height:1.4; color:var(--ink)}
+
+/* ---------- §05 đề nghị ---------- */
+.ask{border:2px solid var(--route)}
+.ask-body{display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:1px; background:var(--rule)}
+@media (max-width:800px){.ask-body{grid-template-columns:1fr}}
+.item{background:var(--paper); padding:14px 18px 16px;
+  display:flex; flex-direction:column; gap:7px}
+.item-hd{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap}
+.item-n{font-family:var(--mono); font-size:16.8px; font-weight:700; color:var(--route)}
+.item-hd h4{font-size:18px; font-weight:650; letter-spacing:-.02em;
+  flex:1 1 150px; line-height:1.24}
+.item-by{font-family:var(--mono); font-size:13.2px; font-weight:700;
+  font-variant-numeric:tabular-nums; border:1px solid var(--route);
+  padding:1px 6px; color:var(--ink); white-space:nowrap}
+.item p{font-size:15.2px; line-height:1.46; color:var(--ink-soft)}
+.item p b{color:var(--ink)}
+
+.foot{display:flex; flex-wrap:wrap; gap:8px 22px; justify-content:space-between;
+  border-top:1px solid var(--rule); padding-top:12px}
+
+@media print{
+  @page{size:A3 portrait; margin:11mm}
+  body{background:#fff; color:#000}
+  .page{padding:0; zoom:.9; gap:20px}
+  .sec,.probs,.blocks,.goals,.how,.rm,.ask{break-inside:avoid}
+  .probs{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .blocks{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .rungs{grid-template-columns:repeat(5,1fr)}
+  .goals,.how{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .rm{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .ask-body{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
+</style>
+
+<div class="page">
+
+  <header class="head">
+    <div class="titleblock">
+      <span class="anno anno-r">Tờ trình Ban Giám đốc · Trung tâm SCC</span>
+      <h1>Kế hoạch ứng dụng AI — tháng 8 đến tháng 11 / 2026</h1>
+    </div>
+    <div class="sheet">
+      <div><span class="anno">Khung tham chiếu</span><b>FPT CASAN</b></div>
+      <div><span class="anno">Quy mô</span><b>Toàn SCC</b></div>
+      <div><span class="anno">Lập ngày</span><b>29.07.2026</b></div>
+    </div>
+  </header>
+
+  <!-- ===== §01 BỐI CẢNH ===== -->
+  <section class="sec">
+    <div class="sec-hd">
+      <span class="anno anno-r">§01 · Bối cảnh</span>
+      <h2>Điểm hạn chế khi ứng dụng AI tại SCC</h2>
+      <span class="aim">Số liệu từ đợt tự đánh giá 21/21 người · T7/2026</span>
+    </div>
+
+    <div class="probs" role="img" aria-label="Bốn chỉ số còn yếu: kỹ năng dùng AI 17 phần trăm, không đo được lợi ích AI 33 phần trăm, quy trình chưa ghi thành chuẩn 33 phần trăm, và 43 phần trăm đánh giá còn ở Cấp 1.">
+      <div class="prob">
+        <span class="stat">17%</span>
+        <h3>Kỹ năng dùng AI</h3>
+      </div>
+      <div class="prob">
+        <span class="stat">33%</span>
+        <h3>Không đo được AI mang lại gì</h3>
+      </div>
+      <div class="prob">
+        <span class="stat">33%</span>
+        <h3>Quy trình chưa ghi thành chuẩn</h3>
+      </div>
+      <div class="prob">
+        <span class="stat mid">43%</span>
+        <h3>Đánh giá còn ở Cấp 1</h3>
+      </div>
+    </div>
+
+    <div class="blocks-hd">
+      <span class="anno" style="color:var(--risk-high)">Điểm nghẽn</span>
+      <span class="anno" style="letter-spacing:.04em;text-transform:none;font-size:13.2px;color:var(--grey)">Còn tồn tại thì chưa được công nhận lên cấp, dù các chiều khác có tốt đến đâu</span>
+    </div>
+
+    <div class="blocks">
+      <div class="blk">
+        <h3>Chưa có cách kiểm tra lại kết quả AI</h3>
+      </div>
+      <div class="blk">
+        <h3>Chưa có quy định dùng AI và bảo vệ dữ liệu</h3>
+        <span class="src">CSOC chủ trì · ngoài tầm SCC</span>
+      </div>
+      <div class="blk">
+        <h3>Chưa có người làm chủ dữ liệu và chịu trách nhiệm</h3>
+      </div>
+    </div>
+
+    <div class="rungs" role="img" aria-label="Thang CASAN năm cấp. Cấp 1 Curious thử lẻ tẻ. Cấp 2 Augmented dùng có tổ chức, SCC đang ở đây. Cấp 3 Standard bài bản và kiểm soát được, là đích ngày 30 tháng 9. Cấp 4 Automated AI tự vận hành luồng, SCC cam kết một luồng chạy thật vào 30 tháng 11. Cấp 5 Native vận hành quanh AI, ngoài phạm vi kỳ này.">
+      <div class="rung r1"><span class="r-n">Cấp 1 · Curious</span><span class="r-nm">Thử lẻ tẻ</span></div>
+      <div class="rung r2"><span class="r-n">Cấp 2 · Augmented</span><span class="r-here">Đang ở đây</span><span class="r-nm">Dùng có tổ chức</span></div>
+      <div class="rung r3"><span class="r-n">Cấp 3 · Standard</span><span class="r-here">Đích 30.09</span><span class="r-nm">Bài bản, kiểm soát được</span></div>
+      <div class="rung r4"><span class="r-n">Cấp 4 · Automated</span><span class="r-nm">Một luồng chạy thật · 30.11</span></div>
+      <div class="rung r5"><span class="r-n">Cấp 5 · Native</span><span class="r-nm">Ngoài phạm vi kỳ này</span></div>
+    </div>
+  </section>
+
+  <!-- ===== §02 MỤC TIÊU ĐỊNH HƯỚNG ===== -->
+  <section class="sec">
+    <div class="sec-hd">
+      <span class="anno anno-r">§02 · Mục tiêu định hướng</span>
+      <h2>Định hướng tập trung vào giá trị thực tế mang lại và tầm nhìn lâu dài</h2>
+      <span class="aim">Mục tiêu sau dựa trên kết quả của mục tiêu trước</span>
+    </div>
+
+    <div class="goals">
+      <div class="goal goal-1">
+        <span class="pri pri-1">Ưu tiên 1</span>
+        <div class="goal-hd"><span class="goal-id">①</span><h3>Danh mục AI toàn SCC</h3><span class="goal-when num">14.08</span></div>
+        <p>Kiểm kê công việc cả bốn phòng. Mỗi việc ghi rõ:</p>
+        <ul>
+          <li>Người chịu trách nhiệm</li>
+          <li>Chỉ số đo và mức rủi ro</li>
+          <li><b>Đang tốn bao nhiêu giờ mỗi tháng</b></li>
+          <li><b>Còn lại bao nhiêu giờ khi có AI hỗ trợ</b></li>
+          <li><b>Còn lại bao nhiêu giờ khi AI tự làm</b></li>
+        </ul>
+      </div>
+      <div class="goal">
+        <span class="pri">Ưu tiên 2</span>
+        <div class="goal-hd"><span class="goal-id">②</span><h3>Đưa trung tâm lên Cấp 3</h3><span class="goal-when num">30.09</span></div>
+        <p>Bốn điều kiện phải có:</p>
+        <ul>
+          <li>Chuẩn dùng AI chung cho 4/4 phòng</li>
+          <li>Thư viện prompt dùng lại được</li>
+          <li>Nhịp xem xét hàng tháng</li>
+          <li>Đo được lợi ích</li>
+        </ul>
+      </div>
+      <div class="goal">
+        <span class="pri">Ưu tiên 3</span>
+        <div class="goal-hd"><span class="goal-id">③</span><h3>Một luồng automation Cấp 4</h3><span class="goal-when num">30.11</span></div>
+        <p>Một quy trình do AI Agent vận hành có kiểm soát:</p>
+        <ul>
+          <li>Logging</li>
+          <li>Kill switch</li>
+          <li>Rollback</li>
+          <li>On-call</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== §03 CÁCH LÀM ===== -->
+  <section class="sec">
+    <div class="sec-hd">
+      <span class="anno anno-r">§03 · Cách làm</span>
+      <h2>Triển khai vào văn hóa sử dụng AI</h2>
+      <span class="aim">Kế thừa cái đã có · thêm sổ sách và quy chế</span>
+    </div>
+
+    <div class="how">
+      <div class="hcol">
+        <div class="hcol-hd"><span class="anno anno-c">Kế thừa — mở quyền 14.08</span><h3>Bốn thứ R&amp;D đang chạy</h3></div>
+        <ul>
+          <li><b>Thư viện prompt</b></li>
+          <li><b>Playbook</b> theo vai trò</li>
+          <li><b>AI Policy</b></li>
+          <li><b>Hệ thống theo dõi Claude</b></li>
+        </ul>
+      </div>
+      <div class="hcol">
+        <div class="hcol-hd"><span class="anno anno-r">Làm mới — một quyển duy nhất</span><h3>AI Catalog</h3></div>
+        <ul>
+          <li><b>Danh mục việc dùng AI</b></li>
+          <li><b>Người chịu trách nhiệm · KPI · mức rủi ro</b></li>
+          <li><b>Chỉ số sử dụng</b></li>
+          <li><b>Bằng chứng chấm điểm</b></li>
+          <li><b>Biên bản review định kỳ</b></li>
+        </ul>
+      </div>
+      <div class="hcol">
+        <div class="hcol-hd"><span class="anno anno-r">Quy chế</span><h3>Bốn thành phần</h3></div>
+        <ul>
+          <li><b>Một người quản lý tập trung</b> giữ AI Catalog cho cả trung tâm</li>
+          <li><b>Nhịp review hàng tháng</b> theo từng dòng danh mục</li>
+          <li><b>Quy tắc nhập liệu</b>, cấu trúc catalog khóa từ 14.08</li>
+          <li><b>Bằng chứng ghi theo nhịp</b>, không dồn cuối kỳ</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== §04 ROADMAP ===== -->
+  <section class="sec">
+    <div class="sec-hd">
+      <span class="anno anno-r">§04 · Roadmap</span>
+      <h2>Kế hoạch dự kiến 2H</h2>
+      <span class="aim">Cấp 3 chốt cuối Quý 3 · automation trọn Quý 4</span>
+    </div>
+
+    <div class="rm-q" aria-hidden="true">
+      <span>Quý 3 · kiểm kê, dùng thật, chấm điểm</span>
+      <span>Quý 4 · dựng luồng, chạy thật, đối chiếu</span>
+    </div>
+
+    <div class="rm">
+      <article class="stage s1">
+        <div class="stage-hd"><span class="stage-mo">Tháng 8</span><h3>Ứng dụng ngay toàn trung tâm</h3></div>
+        <div class="track"></div>
+        <ul>
+          <li><b>05–13.08</b> các phòng phối hợp hoàn thành nội dung chuẩn danh mục AI Catalog</li>
+          <li><b>14.08</b> mở thư viện prompt, playbook, AI Policy cho toàn SCC</li>
+          <li><b>21.08</b> review và báo cáo AI Catalog</li>
+        </ul>
+        <div class="out"><span class="anno anno-c">Output</span><span>Danh mục phủ 4/4 phòng · Báo cáo hiệu quả Đợt 1</span></div>
+      </article>
+
+      <article class="stage s2">
+        <div class="stage-hd"><span class="stage-mo">Tháng 9</span><h3>Cập nhật review CASAN</h3></div>
+        <div class="track"></div>
+        <ul>
+          <li>Theo dõi catalog AI của các phòng, <b>ít nhất 1 mục đã được triển khai</b></li>
+          <li><b>21–25.09</b> chấm điểm theo hồ sơ bằng chứng, không tự chấm</li>
+          <li><b>25.09</b> review và báo cáo AI Catalog</li>
+        </ul>
+        <div class="out"><span class="anno anno-c">Output</span><span>Đạt Cấp 3 · BGĐ chốt luồng automation</span></div>
+      </article>
+
+      <article class="stage s3">
+        <div class="stage-hd"><span class="stage-mo">Tháng 10</span><h3>Đánh giá luồng tự động hóa</h3></div>
+        <div class="track"></div>
+        <ul>
+          <li>Xác định rõ AI được làm gì, bước nào cần người duyệt</li>
+          <li>Bốn thứ bắt buộc: <b>logging · kill switch · rollback · on-call</b></li>
+          <li><b>Thử bảo mật trước khi chạy thật</b></li>
+          <li><b>30.10</b> review và báo cáo AI Catalog</li>
+        </ul>
+        <div class="out"><span class="anno anno-c">Output</span><span>Luồng chạy thử phạm vi hẹp, có giám sát</span></div>
+      </article>
+
+      <article class="stage s4">
+        <div class="stage-hd"><span class="stage-mo">Tháng 11</span><h3>Review CASAN và định hướng 2027</h3></div>
+        <div class="track"></div>
+        <ul>
+          <li>Luồng chạy chính thức — <b>đo thật và đối chiếu với dự kiến tháng 8</b></li>
+          <li><b>27.11</b> review và báo cáo AI Catalog</li>
+          <li>Bàn giao AI Catalog và quy chế cho 2027</li>
+        </ul>
+        <div class="out"><span class="anno anno-c">Output</span><span>Báo cáo BGĐ · danh mục ưu tiên 2027</span></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== §05 ĐỀ NGHỊ ===== -->
+  <section class="sec">
+    <div class="sec-hd">
+      <span class="anno anno-r">§05 · Đề nghị</span>
+      <h2>Chỉ định nhân sự phối hợp</h2>
+      <span class="aim">Kế hoạch khởi động thứ Hai 03.08</span>
+    </div>
+
+    <div class="ask">
+      <div class="ask-body">
+        <div class="item">
+          <div class="item-hd"><span class="item-n">1</span><h4>Người chủ trì</h4><span class="item-by num">trước 03.08</span></div>
+          <p>Ủy quyền quản lý tổng thể cho một người: giữ <b>AI Catalog</b> của cả trung tâm · duy trì nhịp review hàng tháng · tập hợp bằng chứng · báo cáo kết quả.</p>
+        </div>
+        <div class="item">
+          <div class="item-hd"><span class="item-n">2</span><h4>Người phối hợp</h4><span class="item-by num">trước 05.08</span></div>
+          <p>Mỗi phòng ngoài R&amp;D cử một người — <b>Vận hành · Dịch vụ · Hệ thống VOIP</b>: phối hợp hoàn thành AI Catalog và review định kỳ hàng tháng.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span class="anno">Trung tâm SCC · Kế hoạch ứng dụng AI Q3–Q4/2026</span>
+    <span class="anno num">Lập ngày 29.07.2026</span>
+  </footer>
+
+</div>
