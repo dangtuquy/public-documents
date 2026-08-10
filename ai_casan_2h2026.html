@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>SCC AI Transformation Roadmap – Tóm tắt 4 tháng</title>
+<style>
+  :root{
+    --navy:#152a5e; --ink:#1b2a5b; --muted:#5b6a90;
+    --g1:#12924a; --g2:#0d7c3d;
+    --b1:#1668c8; --b2:#0e57ad;
+    --o1:#e8720c; --o2:#cf5f05;
+    --p1:#7a2ea6; --p2:#63218a;
+    --line:#e3e8f2;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    width:1600px;height:900px;background:#fff;
+    font-family:"Lato","Segoe UI","DejaVu Sans",sans-serif;
+    color:var(--ink);-webkit-font-smoothing:antialiased;
+  }
+  .slide{width:1600px;height:900px;padding:18px 24px 16px;display:flex;flex-direction:column}
+
+  /* ---------- HEADER ---------- */
+  .head{display:flex;align-items:center;gap:24px;height:78px}
+  .h-left{flex:0 0 auto}
+  .h-left h1{font-size:31px;line-height:1.1;font-weight:900;letter-spacing:-.4px;color:var(--navy)}
+  .h-left h1 .lv{color:var(--g1)}
+  .h-left .sub{font-size:13.8px;font-weight:700;color:#33447a}
+  .badge{display:inline-block;background:#eef3fb;border:1px solid #cfdcf1;color:#1b3f80;
+    font-size:11px;font-weight:900;letter-spacing:.5px;padding:4px 11px;white-space:nowrap;border-radius:20px;text-transform:uppercase}
+  .h-mid{flex:1 1 auto;display:flex;gap:11px;align-items:center;padding-left:24px}
+  .h-mid .t{font-size:14px;font-weight:900;color:var(--g1);letter-spacing:.7px;margin-bottom:3px}
+  .h-mid p{font-size:12.6px;line-height:1.45;color:#3b4a76;max-width:360px}
+  .h-right{flex:0 0 auto}
+  .h-right .lockup{height:62px;width:266px;display:block;font-family:"Lato","Segoe UI",sans-serif}
+
+  /* ---------- GRID ---------- */
+  .grid{display:grid;grid-template-columns:158px repeat(4,1fr);column-gap:10px;row-gap:7px}
+
+  /* month banners */
+  .banner{position:relative;height:58px;display:flex;align-items:center;padding-left:76px;
+    color:#fff;font-weight:900;line-height:1.12;letter-spacing:.2px;
+    clip-path:polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%);}
+  .banner .m{font-size:15.5px;opacity:.95}
+  .banner .n{font-size:17.5px}
+  .bwrap{position:relative}
+  .bwrap .ico{position:absolute;left:-4px;top:-4px;width:66px;height:66px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;z-index:2;box-shadow:0 0 0 4px #fff}
+  .bwrap .ico svg{width:35px;height:35px}
+  .c1 .banner{background:linear-gradient(90deg,var(--g1),var(--g2))} .c1 .ico{background:var(--g1)}
+  .c2 .banner{background:linear-gradient(90deg,var(--b1),var(--b2))} .c2 .ico{background:var(--b1)}
+  .c3 .banner{background:linear-gradient(90deg,var(--o1),var(--o2))} .c3 .ico{background:var(--o1)}
+  .c4 .banner{background:linear-gradient(90deg,var(--p1),var(--p2))} .c4 .ico{background:var(--p1)}
+
+  /* row labels */
+  .rl{display:flex;align-items:center;gap:9px;background:var(--navy);color:#fff;border-radius:7px;
+    padding:0 12px;font-size:12.2px;font-weight:900;letter-spacing:.35px;line-height:1.25}
+  .rl svg{width:21px;height:21px;flex:0 0 21px;opacity:.95}
+
+  .cell{border:1px solid var(--line);border-radius:8px;background:#fff;padding:8px 12px;overflow:hidden}
+  .c1 .cell{border-color:#cfe8d8} .c2 .cell{border-color:#d2e2f6}
+  .c3 .cell{border-color:#f7ddc2} .c4 .cell{border-color:#e2d2ef}
+
+  /* goal */
+  .goal{display:flex;align-items:center;justify-content:center;text-align:center;
+    font-size:13.6px;font-weight:800;line-height:1.34;color:#1c2c5e}
+  .c1 .goal{background:#f2faf5} .c2 .goal{background:#f2f7fd}
+  .c3 .goal{background:#fdf6ef} .c4 .goal{background:#f8f3fc}
+
+  /* initiatives */
+  ol.init{list-style:none;display:flex;flex-direction:column;gap:7px;justify-content:center;height:100%}
+  ol.init li{display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.28;color:#33426e}
+  ol.init li b{font-weight:800;color:#1c2c5e}
+  .num{flex:0 0 17px;height:17px;border-radius:50%;color:#fff;font-size:10.5px;font-weight:900;
+    display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .c1 .num{background:var(--g1)} .c2 .num{background:var(--b1)}
+  .c3 .num{background:var(--o1)} .c4 .num{background:var(--p1)}
+
+  /* deliverables */
+  .dels{display:flex;flex-wrap:wrap;gap:5px;align-content:center;height:100%}
+  .chip{font-size:11.4px;font-weight:800;padding:4.5px 9px;border-radius:15px;line-height:1.15;
+    display:flex;align-items:center;gap:6px}
+  .chip::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.85}
+  .c1 .chip{background:#eaf6ef;color:#0f7a3f} .c2 .chip{background:#e9f1fc;color:#0f57ad}
+  .c3 .chip{background:#fdefe0;color:#c25f07} .c4 .chip{background:#f3eafa;color:#6b2394}
+
+  /* kpi */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;height:100%}
+  .kpi{border-radius:7px;text-align:center;padding:6px 3px;display:flex;flex-direction:column;justify-content:center}
+  .kpi .v{font-size:16.5px;font-weight:900;line-height:1.1}
+  .kpi .l{font-size:9.8px;font-weight:700;color:#4b5a83;line-height:1.2;margin-top:3px}
+  .c1 .kpi{background:#f0f8f3} .c1 .kpi .v{color:var(--g1)}
+  .c2 .kpi{background:#eff5fd} .c2 .kpi .v{color:var(--b1)}
+  .c3 .kpi{background:#fdf4ec} .c3 .kpi .v{color:var(--o1)}
+  .c4 .kpi{background:#f7f1fc} .c4 .kpi .v{color:var(--p1)}
+
+  /* done */
+  ul.done{list-style:none;display:flex;flex-direction:column;gap:5px;justify-content:center;height:100%}
+  ul.done li{position:relative;padding-left:13px;font-size:11.9px;line-height:1.3;font-weight:600;color:#33426e}
+  ul.done li::before{content:"";position:absolute;left:0;top:6px;width:5px;height:5px;border-radius:50%}
+  .c1 ul.done li::before{background:var(--g1)} .c2 ul.done li::before{background:var(--b1)}
+  .c3 ul.done li::before{background:var(--o1)} .c4 ul.done li::before{background:var(--p1)}
+
+  /* ---------- JOURNEY ---------- */
+  .journey{margin-top:12px;height:148px;display:grid;grid-template-columns:1fr 486px;gap:12px;align-items:stretch}
+  .jbox{border:1px solid var(--line);border-radius:10px;padding:10px 20px 10px;background:#fbfcfe}
+  .jt{font-size:13.5px;font-weight:900;color:var(--navy);letter-spacing:.5px;margin-bottom:8px}
+  .steps{display:flex;align-items:flex-start;justify-content:space-between}
+  .step{text-align:center;width:150px}
+  .ball{width:54px;height:54px;border-radius:50%;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:22px;font-weight:900;box-shadow:0 0 0 4px #fff, 0 0 0 6px rgba(0,0,0,.05)}
+  .step .d{font-size:11.8px;font-weight:900;color:var(--navy);letter-spacing:.2px}
+  .step .x{font-size:11.3px;font-weight:600;color:#4b5a83;line-height:1.25;margin-top:2px}
+  .arrow{flex:1;height:54px;display:flex;align-items:center;justify-content:center}
+  .arrow svg{width:100%;height:12px}
+  .defbox{border:1px solid #cfe0f5;border-radius:10px;background:#f4f8fd;padding:11px 14px;display:flex;gap:12px;align-items:center}
+  .defbox .tx h4{font-size:13px;font-weight:900;color:var(--navy);letter-spacing:.3px;margin-bottom:4px}
+  .defbox .tx p{font-size:12.2px;line-height:1.4;color:#3b4a76;font-weight:600}
+  .defbox svg{width:50px;height:50px;flex:0 0 50px}
+
+  /* ---------- FOOTER ---------- */
+  .foot{margin-top:12px;background:var(--navy);border-radius:8px;height:44px;display:flex;align-items:center;
+    padding:0 18px;gap:22px;color:#fff}
+  .foot .lab{font-size:12.6px;font-weight:900;letter-spacing:.5px;padding-right:20px;border-right:1px solid rgba(255,255,255,.25)}
+  .foot .it{display:flex;align-items:center;gap:7px;font-size:12.6px;font-weight:700;color:#dbe4f6}
+  .foot .it svg{width:17px;height:17px;opacity:.9}
+  .foot .tag{margin-left:auto;font-size:13.4px;font-weight:900;color:#31d07a;letter-spacing:.4px}
+</style>
+</head>
+<body>
+<div class="slide">
+
+  <!-- HEADER -->
+  <div class="head">
+    <div class="h-left">
+      <h1>SCC AI TRANSFORMATION ROADMAP<br>HƯỚNG TỚI CASAN LEVEL <span class="lv">3 – 3.5</span></h1>
+    </div>
+    <div class="h-mid">
+      <svg viewBox="0 0 48 48" style="width:40px;height:40px;flex:0 0 40px">
+        <circle cx="22" cy="26" r="17" fill="none" stroke="#12924a" stroke-width="3.4"/>
+        <circle cx="22" cy="26" r="9" fill="none" stroke="#12924a" stroke-width="3.4"/>
+        <circle cx="22" cy="26" r="2.8" fill="#12924a"/>
+        <path d="M22 26 L41 7" stroke="#152a5e" stroke-width="3.4" stroke-linecap="round"/>
+        <path d="M34 7 L41 7 L41 14" fill="none" stroke="#152a5e" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <div class="t">TẦM NHÌN</div>
+        <p>Trở thành đơn vị dẫn đầu FPT Telecom về ứng dụng AI, tạo ra giá trị thực tế và nền tảng vững chắc cho Level 4.</p>
+      </div>
+    </div>
+    <div class="h-right">
+      <svg viewBox="0 0 360 84" class="lockup">
+        <rect x="4" y="6" width="72" height="72" rx="16" fill="#152a5e"/>
+        <g fill="none" stroke="#ffffff" stroke-width="3.4" stroke-linecap="round">
+          <path d="M40 61a19 19 0 1 1 19-19" opacity=".95"/>
+          <path d="M40 53a11 11 0 1 1 11-11" opacity=".7"/>
+        </g>
+        <circle cx="40" cy="42" r="4.2" fill="#12924a"/>
+        <path d="M40 42 L61 21" stroke="#12924a" stroke-width="3.4" stroke-linecap="round"/>
+        <path d="M53 21h8v8" fill="none" stroke="#12924a" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="90" y="43" fill="#152a5e" font-size="38" font-weight="900" letter-spacing="1">SCC</text>
+        <text x="91" y="64" fill="#3b4a76" font-size="12.4" font-weight="700" letter-spacing="2.5">SERVICE COMMAND CENTER</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid">
+    <!-- row: banners -->
+    <div></div>
+    <div class="c1 bwrap">
+      <div class="ico">
+        <svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M24 24c0-7 5-12 12-12 0 7-5 12-12 12z" fill="#fff" stroke="none"/>
+          <path d="M24 24c0-6-4-10-10-10 0 6 4 10 10 10z" fill="#fff" stroke="none"/>
+          <path d="M24 24v9"/>
+          <path d="M9 31c0 6 5 10 11 10h8c6 0 11-4 11-10"/>
+        </svg>
+      </div>
+      <div class="banner"><div><div class="m">AUGUST 2026</div><div class="n">BUILD AI FOUNDATION</div></div></div>
+    </div>
+    <div class="c2 bwrap">
+      <div class="ico">
+        <svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M24 6l15 6v12c0 10-6.5 16-15 18-8.5-2-15-8-15-18V12z"/>
+          <path d="M16 24l6 6 11-12"/>
+        </svg>
+      </div>
+      <div class="banner"><div><div class="m">SEPTEMBER 2026</div><div class="n">STANDARDIZE AI</div></div></div>
+    </div>
+    <div class="c3 bwrap">
+      <div class="ico">
+        <svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="16" width="30" height="24" rx="6"/>
+          <circle cx="24" cy="8" r="3"/><path d="M24 11v5"/>
+          <circle cx="18" cy="26" r="2.6" fill="#fff" stroke="none"/>
+          <circle cx="30" cy="26" r="2.6" fill="#fff" stroke="none"/>
+          <path d="M19 33h10"/>
+          <path d="M9 24H4M39 24h5"/>
+        </svg>
+      </div>
+      <div class="banner"><div><div class="m">OCTOBER 2026</div><div class="n">VALIDATE AI AUTOMATION</div></div></div>
+    </div>
+    <div class="c4 bwrap">
+      <div class="ico">
+        <svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="8" y="28" width="7" height="12" rx="1.5" fill="#fff" stroke="none"/>
+          <rect x="20" y="22" width="7" height="18" rx="1.5" fill="#fff" stroke="none"/>
+          <rect x="32" y="15" width="7" height="25" rx="1.5" fill="#fff" stroke="none"/>
+          <path d="M9 22l9-8 7 6 13-12"/>
+          <path d="M31 8h7v7"/>
+        </svg>
+      </div>
+      <div class="banner"><div><div class="m">NOVEMBER 2026</div><div class="n">SCALE AI VALUE</div></div></div>
+    </div>
+
+    <!-- row: goal -->
+    <div class="rl" style="grid-row:span 1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.2" fill="#fff"/></svg>
+      MỤC TIÊU<br>CHIẾN LƯỢC
+    </div>
+    <div class="c1"><div class="cell goal" style="height:60px">Xây dựng đầy đủ nền tảng quản trị AI để SCC sẵn sàng đạt CASAN Level 3.</div></div>
+    <div class="c2"><div class="cell goal" style="height:60px">Đạt CASAN Level 3 với đầy đủ bằng chứng khách quan và cơ chế vận hành ổn định.</div></div>
+    <div class="c3"><div class="cell goal" style="height:60px">Kiểm chứng giá trị của AI Automation trên quy trình thực tế.</div></div>
+    <div class="c4"><div class="cell goal" style="height:60px">Đưa AI Automation vào vận hành và mở rộng giá trị, chuẩn bị nền tảng hướng tới Level 4.</div></div>
+
+    <!-- row: initiatives -->
+    <div class="rl">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c3.5 3 5.5 6.5 5.5 10.5 0 2.5-1 4.5-2 5.5h-7c-1-1-2-3-2-5.5C6.5 8.5 8.5 5 12 2z"/><circle cx="12" cy="10" r="2"/><path d="M9 21h6"/></svg>
+      SÁNG KIẾN<br>TRỌNG TÂM
+    </div>
+    <div class="c1"><div class="cell" style="height:166px"><ol class="init">
+      <li><span class="num">1</span><span>Chuẩn hoá <b>AI Portfolio</b> (Use Case, KPI, Owner, ROI, Risk)</span></li>
+      <li><span class="num">2</span><span>Xây dựng <b>Shared Library</b> (Prompt, Agent, Workflow, Playbook)</span></li>
+      <li><span class="num">3</span><span>Thiết lập <b>AI Governance</b> (Quy trình, phân quyền, review, approval)</span></li>
+      <li><span class="num">4</span><span>Thiết lập <b>Dashboard</b> theo dõi AI (Adoption, ROI, Productivity)</span></li>
+    </ol></div></div>
+    <div class="c2"><div class="cell" style="height:166px"><ol class="init">
+      <li><span class="num">1</span><span><b>AI Value Review</b> 2 tuần/lần (Tiến độ, KPI, ROI, Issues)</span></li>
+      <li><span class="num">2</span><span>Hoàn thiện <b>Evidence</b> cho 5 Dimension của CASAN Level 3</span></li>
+      <li><span class="num">3</span><span>Đánh giá độc lập CASAN Level 3 (<b>Internal Audit</b>)</span></li>
+      <li><span class="num">4</span><span>Xuất bản <b>AI Playbook v1</b> và quy trình vận hành chuẩn</span></li>
+    </ol></div></div>
+    <div class="c3"><div class="cell" style="height:166px"><ol class="init">
+      <li><span class="num">1</span><span>Chọn <b>01 quy trình ưu tiên</b> (Tần suất cao, ROI cao, Rủi ro thấp)</span></li>
+      <li><span class="num">2</span><span>Thiết kế <b>AI Agent &amp; Automation Workflow</b></span></li>
+      <li><span class="num">3</span><span><b>Pilot 4 tuần</b> (Có giám sát, human review, rollback plan)</span></li>
+      <li><span class="num">4</span><span>Đo lường <b>Before – After</b> và đánh giá hiệu quả</span></li>
+    </ol></div></div>
+    <div class="c4"><div class="cell" style="height:166px"><ol class="init">
+      <li><span class="num">1</span><span>Triển khai <b>Production</b> (AI Agent vận hành thực tế)</span></li>
+      <li><span class="num">2</span><span>Xây dựng <b>AI Operation Dashboard &amp; Monitoring</b></span></li>
+      <li><span class="num">3</span><span>Đánh giá hiệu quả sau triển khai (<b>Value Realization</b>)</span></li>
+      <li><span class="num">4</span><span>Lập kế hoạch mở rộng <b>Use Case &amp; AI Catalog 2027</b></span></li>
+    </ol></div></div>
+
+    <!-- row: deliverables -->
+    <div class="rl">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg>
+      DELIVERABLES
+    </div>
+    <div class="c1"><div class="cell dels" style="height:88px">
+      <span class="chip">AI Portfolio v1</span><span class="chip">Shared Library</span>
+      <span class="chip">AI Governance Framework</span><span class="chip">AI KPI Dashboard</span>
+    </div></div>
+    <div class="c2"><div class="cell dels" style="height:88px">
+      <span class="chip">AI Playbook v1</span><span class="chip">CASAN L3 Evidence 100%</span>
+      <span class="chip">Executive Dashboard</span><span class="chip">AI Review Report</span>
+    </div></div>
+    <div class="c3"><div class="cell dels" style="height:88px">
+      <span class="chip">Pilot AI Agent v1</span><span class="chip">Pilot Report &amp; Evaluation</span>
+      <span class="chip">ROI &amp; Value Report</span><span class="chip">Lessons Learned</span>
+    </div></div>
+    <div class="c4"><div class="cell dels" style="height:88px">
+      <span class="chip">Production Go-live</span><span class="chip">AI Operation Dashboard</span>
+      <span class="chip">Value Realization Report</span><span class="chip">AI Catalog v2 &amp; 2027 Plan</span>
+    </div></div>
+
+    <!-- row: kpi -->
+    <div class="rl">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M3 20h18"/><path d="M6 20v-6M11 20V8M16 20v-9M21 20V5"/></svg>
+      KPI NỔI BẬT
+    </div>
+    <div class="c1"><div class="cell kpis" style="height:67px;padding:5px">
+      <div class="kpi"><div class="v">100%</div><div class="l">Use Case có Owner</div></div>
+      <div class="kpi"><div class="v">100%</div><div class="l">Use Case có KPI</div></div>
+      <div class="kpi"><div class="v">100%</div><div class="l">Tool AI được quản trị</div></div>
+      <div class="kpi"><div class="v">≥ 30</div><div class="l">Prompt/Agent/ Workflow</div></div>
+    </div></div>
+    <div class="c2"><div class="cell kpis" style="height:67px;padding:5px">
+      <div class="kpi"><div class="v">100%</div><div class="l">Mandatory Criteria đạt</div></div>
+      <div class="kpi"><div class="v">≥ 80%</div><div class="l">Optional Criteria đạt</div></div>
+      <div class="kpi"><div class="v">≥ 90%</div><div class="l">User dùng AI hàng tuần</div></div>
+      <div class="kpi"><div class="v">100%</div><div class="l">Team có Use Case AI</div></div>
+    </div></div>
+    <div class="c3"><div class="cell kpis" style="height:67px;padding:5px">
+      <div class="kpi"><div class="v">≥ 50%</div><div class="l">Thời gian xử lý giảm</div></div>
+      <div class="kpi"><div class="v">≥ 30%</div><div class="l">Effort/giờ công tiết kiệm</div></div>
+      <div class="kpi"><div class="v">≥ 95%</div><div class="l">Accuracy Agent</div></div>
+      <div class="kpi"><div class="v">&lt; 20%</div><div class="l">Human Intervention</div></div>
+    </div></div>
+    <div class="c4"><div class="cell kpis" style="height:67px;padding:5px">
+      <div class="kpi"><div class="v">≥ 20%</div><div class="l">Automation Coverage</div></div>
+      <div class="kpi"><div class="v">≥ 90%</div><div class="l">AI Adoption hàng tuần</div></div>
+      <div class="kpi"><div class="v">≥ 500h</div><div class="l">Giờ công tiết kiệm/tháng</div></div>
+      <div class="kpi"><div class="v">ROI +</div><div class="l">Giá trị tài chính đo lường được</div></div>
+    </div></div>
+
+    <!-- row: definition of done -->
+    <div class="rl">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 9.8"/></svg>
+      ĐỊNH NGHĨA<br>HOÀN THÀNH
+    </div>
+    <div class="c1"><div class="cell" style="height:92px"><ul class="done">
+      <li>AI Portfolio v1 được phê duyệt và công bố.</li>
+      <li>Shared Library hoạt động cho toàn SCC.</li>
+      <li>Dashboard AI hoạt động với dữ liệu baseline.</li>
+      <li>AI Governance được ban hành và phổ biến.</li>
+    </ul></div></div>
+    <div class="c2"><div class="cell" style="height:92px"><ul class="done">
+      <li>Tất cả tiêu chí bắt buộc Level 3 = Yes.</li>
+      <li>Evidence đầy đủ và được xác nhận.</li>
+      <li>AI Review và KPI Dashboard vận hành định kỳ.</li>
+      <li>AI Playbook được áp dụng trong toàn SCC.</li>
+    </ul></div></div>
+    <div class="c3"><div class="cell" style="height:92px"><ul class="done">
+      <li>Pilot hoàn thành ≥ 4 tuần và đạt KPI cam kết.</li>
+      <li>Báo cáo ROI được phê duyệt.</li>
+      <li>Quy trình, rủi ro và cơ chế giám sát được thiết lập.</li>
+      <li>Go/No-Go cho Production.</li>
+    </ul></div></div>
+    <div class="c4"><div class="cell" style="height:92px"><ul class="done">
+      <li>AI Agent hoạt động ổn định trong production.</li>
+      <li>Dashboard vận hành và cảnh báo theo thời gian thực.</li>
+      <li>Báo cáo Value Realization được duyệt.</li>
+      <li>AI Catalog 2027 được phê duyệt.</li>
+    </ul></div></div>
+  </div>
+
+  <!-- JOURNEY -->
+  <div class="journey">
+    <div class="jbox">
+      <div class="jt">CASAN JOURNEY</div>
+      <div class="steps">
+        <div class="step">
+          <div class="ball" style="background:#e8720c">2.5</div>
+          <div class="d">AUG 2026</div>
+          <div class="x">Củng cố nền tảng &amp; chuẩn hoá</div>
+        </div>
+        <div class="arrow"><svg viewBox="0 0 100 12" preserveAspectRatio="none"><path d="M2 6h88" stroke="#b9c2d6" stroke-width="3"/><path d="M86 1l10 5-10 5z" fill="#b9c2d6"/></svg></div>
+        <div class="step">
+          <div class="ball" style="background:#1668c8">3.0</div>
+          <div class="d">SEP 2026</div>
+          <div class="x">Đạt CASAN Level 3</div>
+        </div>
+        <div class="arrow"><svg viewBox="0 0 100 12" preserveAspectRatio="none"><path d="M2 6h88" stroke="#8d97ad" stroke-width="3"/><path d="M86 1l10 5-10 5z" fill="#8d97ad"/></svg></div>
+        <div class="step">
+          <div class="ball" style="background:#7a2ea6">3.5</div>
+          <div class="d">OCT – NOV 2026</div>
+          <div class="x">Automation bước đầu &amp; tạo giá trị</div>
+        </div>
+        <div class="arrow"><svg viewBox="0 0 100 12" preserveAspectRatio="none"><path d="M2 6h88" stroke="#67c08e" stroke-width="3"/><path d="M86 1l10 5-10 5z" fill="#67c08e"/></svg></div>
+        <div class="step">
+          <div class="ball" style="background:#1f9c5c">4.x</div>
+          <div class="d" style="color:#12924a">2027+</div>
+          <div class="x">Hướng tới Level 4 (Advanced)</div>
+        </div>
+      </div>
+    </div>
+    <div class="defbox">
+      <div class="tx">
+        <h4>ĐỊNH NGHĨA “LEVEL 3.5” (NỘI BỘ SCC)</h4>
+        <p>Đã đạt toàn bộ yêu cầu CASAN Level 3 và có ít nhất 01 quy trình AI Agent tự động hoá được vận hành thực tế với KPI và cơ chế giám sát rõ ràng.</p>
+      </div>
+      <svg viewBox="0 0 48 48">
+        <circle cx="22" cy="26" r="17" fill="none" stroke="#12924a" stroke-width="3.4"/>
+        <circle cx="22" cy="26" r="9" fill="none" stroke="#12924a" stroke-width="3.4"/>
+        <circle cx="22" cy="26" r="2.8" fill="#12924a"/>
+        <path d="M22 26 L41 7" stroke="#152a5e" stroke-width="3.4" stroke-linecap="round"/>
+        <path d="M34 7 L41 7 L41 14" fill="none" stroke="#152a5e" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="lab">NGUYÊN TẮC TRIỂN KHAI</div>
+    <div class="it"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M16.5 6.5a3 3 0 010 5.5"/><path d="M18 19c0-2.2-1-3.8-2.5-4.6"/></svg>Lãnh đạo dẫn dắt</div>
+    <div class="it"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 4V2M12 22v-2M4 12H2M22 12h-2"/></svg>Lấy giá trị làm trung tâm</div>
+    <div class="it"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"><path d="M12 3l7 3v6c0 5-3 8-7 9-4-1-7-4-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>An toàn &amp; tuân thủ</div>
+    <div class="it"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 15l3-4 3 3 4-6"/></svg>Đo lường minh bạch</div>
+    <div class="it"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0113.5-5.8"/><path d="M20 12a8 8 0 01-13.5 5.8"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>Cải tiến liên tục</div>
+    <div class="it"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.3 10.8l7.4-3.6M8.3 13.2l7.4 3.6"/></svg>Chia sẻ &amp; mở rộng</div>
+    <div class="tag">AI TODAY – VALUE TOMORROW</div>
+  </div>
+
+</div>
+</body>
+</html>
