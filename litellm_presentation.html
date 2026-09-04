@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LiteLLM — Nền tảng quản lý AI tập trung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --fpt-red:#E4002B;
+    --fpt-red-dark:#B30022;
+    --fpt-orange:#F58220;
+    --ink:#1F2937;
+    --ink-soft:#4B5563;
+    --bg:#F6F7F9;
+    --card:#FFFFFF;
+    --border:#E5E7EB;
+    --shadow:0 10px 30px rgba(15,23,42,.08);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Be Vietnam Pro',system-ui,-apple-system,sans-serif;
+    color:var(--ink);
+    background:#EDEFF3;
+    padding:28px 20px 60px;
+  }
+  .deck{width:100%;max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+
+  /* ---- Slide panel ---- */
+  .slide{background:var(--bg);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;position:relative}
+  .bar{height:6px;background:linear-gradient(90deg,var(--fpt-red),var(--fpt-orange))}
+  .slideno{position:absolute;top:22px;right:30px;font-weight:800;font-size:.92rem;letter-spacing:.08em;color:#C3C9D4}
+  .inner{padding:40px 56px 52px}
+
+  /* ---- Typography ---- */
+  .eyebrow{font-weight:800;font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;color:var(--fpt-red);margin:0 0 14px}
+  h1,h2{font-weight:800;margin:0;line-height:1.16;text-wrap:balance;color:var(--ink)}
+  h1{font-size:clamp(1.9rem,4.2vw,3rem);max-width:24ch}
+  h2{font-size:clamp(1.55rem,3.4vw,2.4rem);max-width:30ch}
+  .sub{font-size:clamp(1rem,1.8vw,1.18rem);font-weight:500;margin-top:18px;max-width:68ch;line-height:1.65;color:var(--ink-soft)}
+  .sub b{color:var(--ink);font-weight:700}
+  .rule{width:56px;height:4px;border-radius:2px;background:var(--fpt-orange);margin:22px 0 0}
+
+  /* ---- Brand (slide 1) ---- */
+  .brand{display:flex;align-items:baseline;gap:14px;margin-bottom:20px}
+  .fpt-word{font-weight:800;font-size:clamp(1.9rem,4vw,2.6rem);color:var(--fpt-red);letter-spacing:.015em;line-height:1}
+  .fpt-tag{font-weight:600;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
+
+  .chips{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+  .chip{background:#fff;border:1px solid var(--border);border-radius:999px;padding:11px 20px;font-weight:600;font-size:1.02rem;color:var(--ink);box-shadow:var(--shadow)}
+  .chip b{color:var(--fpt-red);font-weight:800}
+
+  /* ---- Single bidirectional flow (slide 2) ---- */
+  .single-flow{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:26px}
+  .sf-apps{display:flex;flex-direction:column;gap:12px;flex:1;max-width:196px}
+  .sf-app{background:#FFF3E8;border:1px solid #FBD9BC;border-left:4px solid var(--fpt-orange);border-radius:10px;padding:15px 16px;text-align:center;font-weight:700;font-size:1.02rem;box-shadow:var(--shadow);color:var(--ink)}
+  .sf-conn{display:flex;flex-direction:column;justify-content:center;gap:8px;flex:none;padding:0 4px}
+  .sf-conn .arr{font-size:1.4rem;font-weight:800;line-height:1}
+  .sf-conn .req{color:var(--fpt-red)}
+  .sf-conn .resp{color:var(--fpt-orange)}
+  .sf-hub{background:linear-gradient(135deg,var(--fpt-red),var(--fpt-red-dark));color:#fff;border-radius:14px;padding:22px 18px;text-align:center;font-weight:800;font-size:1.1rem;line-height:1.2;flex:none;width:164px;box-shadow:0 12px 26px rgba(228,0,43,.28)}
+  .sf-hub small{display:block;font-weight:600;font-size:.78rem;color:#FFD2DA;margin-top:4px}
+  .sf-providers{display:flex;flex-direction:column;gap:12px;flex:1;max-width:196px}
+  .sf-provider{background:#fff;border:1px solid var(--border);border-right:4px solid var(--c,#9CA3AF);border-radius:10px;padding:12px 14px;font-weight:700;font-size:.98rem;color:var(--ink);box-shadow:var(--shadow);text-align:center}
+  .legend{margin-top:16px;font-size:.97rem;color:var(--ink-soft);font-weight:500;display:flex;flex-wrap:wrap;gap:8px 24px}
+  .legend .li{display:flex;align-items:center;gap:8px}
+  .legend .sw{font-weight:800}
+  .legend .req .sw{color:var(--fpt-red)}
+  .legend .resp .sw{color:var(--fpt-orange)}
+  .legend b{color:var(--ink-soft)}
+
+  .analogies{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+  .analogy{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px 24px;box-shadow:var(--shadow)}
+  .analogy .t{font-weight:800;font-size:1.18rem;color:var(--fpt-red-dark);margin-bottom:8px;display:flex;align-items:center;gap:10px}
+  .analogy .t::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--fpt-orange);flex:none}
+  .analogy p{margin:0;font-size:1.02rem;line-height:1.6;color:var(--ink-soft);font-weight:500}
+
+  /* ---- Panels / mini-facts (slides 3,8) ---- */
+  .panel{background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px 26px 26px;box-shadow:var(--shadow)}
+  .panel + .panel{margin-top:16px}
+  .plabel{display:flex;align-items:center;gap:9px;font-weight:800;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:var(--fpt-red-dark);margin:0 0 14px}
+  .plabel::before{content:"";width:9px;height:9px;border-radius:2px;background:var(--fpt-orange);flex:none}
+  .facts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+  .fact{background:#fff;border:1px solid var(--border);border-top:5px solid var(--fpt-red);border-radius:14px;padding:24px 26px;box-shadow:var(--shadow)}
+  .fact .k{font-size:.8rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--fpt-orange);display:block}
+  .fact .v{display:block;font-size:1.3rem;font-weight:800;line-height:1.3;color:var(--ink);margin-top:10px}
+  .fact .v small{display:block;color:var(--fpt-red-dark);font-weight:700;font-size:.95rem;margin-top:4px}
+  .fact p{margin:12px 0 0;font-size:1.02rem;line-height:1.6;color:var(--ink-soft);font-weight:500}
+  .micro{font-size:.85rem;color:#9AA1AC;font-weight:500;margin-top:12px;line-height:1.5}
+
+  /* ---- Feature cards (slides 4,5) ---- */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:30px}
+  .card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:26px 24px 24px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+  .card::before{content:"";position:absolute;top:0;left:0;width:100%;height:5px;background:linear-gradient(90deg,var(--fpt-red),var(--fpt-orange))}
+  .card .num{font-weight:800;font-size:.98rem;color:var(--fpt-orange);letter-spacing:.06em}
+  .card b{font-weight:800;font-size:1.22rem;line-height:1.25;color:var(--ink)}
+  .card p{margin:0;font-size:1rem;line-height:1.6;color:var(--ink-soft);font-weight:500}
+
+  /* ---- Pros / Cons rows (slides 6,7) ---- */
+  .rows{display:flex;flex-direction:column;gap:14px;margin-top:28px}
+  .row{display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow)}
+  .row .mk{flex:none;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;line-height:1}
+  .row.good{border-left:5px solid var(--fpt-red)}
+  .row.good .mk{background:#FDE3E8;color:#A6001F}
+  .row.con{border-left:5px solid var(--fpt-orange)}
+  .row.con .mk{background:#FFE7D6;color:#C2410C}
+  .row .body b{display:block;font-size:1.12rem;font-weight:800;color:var(--ink);margin-bottom:4px}
+  .row .body span{display:block;font-size:1rem;line-height:1.6;color:var(--ink-soft);font-weight:500}
+  .softnote{margin-top:22px;font-size:1rem;line-height:1.6;color:var(--ink-soft);font-weight:500;background:#FFF3E8;border:1px solid #FBD9BC;border-radius:10px;padding:12px 18px}
+  .softnote b{color:var(--fpt-red-dark)}
+
+  /* ---- Stats (slide 8) ---- */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:30px}
+  .stat{background:#fff;border:1px solid var(--border);border-radius:14px;padding:26px 16px;text-align:center;box-shadow:var(--shadow)}
+  .stat .num{font-weight:800;font-size:clamp(1.7rem,3.4vw,2.6rem);line-height:1;color:var(--fpt-red);font-variant-numeric:tabular-nums}
+  .stat .lbl{font-weight:600;font-size:.98rem;margin-top:12px;color:var(--ink-soft)}
+
+  /* ---- Security (slide 9) ---- */
+  .sevrow{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 22px}
+  .sev-pill{border-radius:999px;padding:9px 18px;font-weight:700;font-size:1rem;line-height:1.2;background:#F1F2F4;color:#525B64;border:1px solid var(--border)}
+  .sev-pill b{font-weight:800}
+  .sev-pill.c{background:#FDE3E8;border-color:#F6C3CD;color:#A6001F}
+  .sev-pill.h{background:#FFE7D6;border-color:#FCCBA4;color:#C2410C}
+  .sev-pill.m{background:#FCEFC7;border-color:#F5DF96;color:#8A5A00}
+  .sev-pill.l{background:#ECEEF1;border-color:#D7DBE0;color:#4B5563}
+  .sec-list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .sec-item{display:flex;align-items:flex-start;gap:13px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;font-size:1rem;font-weight:500;line-height:1.55;color:var(--ink);box-shadow:var(--shadow)}
+  .sec-item .sev{flex:none;margin-top:2px;border-radius:999px;padding:3px 12px;font-weight:800;font-size:.74rem;letter-spacing:.05em;text-transform:uppercase}
+  .sev.c{background:#A6001F;color:#fff}
+  .sev.h{background:#C2410C;color:#fff}
+  .sev.m{background:#8A5A00;color:#fff}
+  .sev.l{background:#6B7280;color:#fff}
+
+  /* ---- Verdict (slide 10) ---- */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:30px;align-items:stretch}
+  .col{background:#fff;border:1px solid var(--border);border-radius:16px;padding:26px 28px;box-shadow:var(--shadow)}
+  .col h3{font-weight:800;font-size:1.3rem;margin:0 0 20px;display:flex;align-items:center;gap:10px}
+  .col.good h3{color:var(--fpt-red-dark)}
+  .col.good{border-top:6px solid var(--fpt-red)}
+  .col.alt h3{color:var(--ink)}
+  .col.alt{border-top:6px solid var(--fpt-orange)}
+  .col ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:16px}
+  .col li{font-size:1.02rem;font-weight:500;line-height:1.6;display:flex;gap:11px;color:var(--ink-soft)}
+  .col li b{color:var(--ink);font-weight:700}
+  .col li .mk{flex:none;font-weight:800}
+  .col.good li .mk{color:var(--fpt-red)}
+  .col.alt li .mk{color:var(--fpt-orange)}
+  .closing{margin-top:30px;text-align:center}
+  .closing .big{font-weight:800;font-size:clamp(1.25rem,2.7vw,1.8rem);color:var(--ink);line-height:1.4}
+  .tip{margin-top:18px;font-weight:600;font-size:1.02rem;background:#FFF3E8;border:1px solid #FBD9BC;color:var(--fpt-red-dark);border-radius:10px;padding:13px 20px;display:inline-block;line-height:1.5}
+
+  @media screen and (max-width:860px){
+    .inner{padding:32px 24px 44px}
+    .slideno{top:18px;right:20px}
+    .stats{grid-template-columns:1fr 1fr}
+    .grid{grid-template-columns:1fr}
+    .cols{grid-template-columns:1fr}
+    .facts{grid-template-columns:1fr}
+    .analogies{grid-template-columns:1fr}
+    .sec-list{grid-template-columns:1fr}
+    .single-flow{gap:6px}
+    .sf-hub{width:120px;padding:18px 10px;font-size:1rem}
+    .sf-app{font-size:.95rem;padding:12px 10px}
+    .sf-provider{font-size:.9rem;padding:9px 8px}
+    .sf-conn .arr{font-size:1.15rem}
+  }
+  @media screen and (max-width:560px){
+    body{padding:14px 12px 40px}
+  }
+</style>
+</head>
+<body>
+  <div class="deck">
+
+    <!-- SLIDE 1 · Giới thiệu -->
+    <section class="slide" aria-label="Giới thiệu LiteLLM">
+      <div class="bar"></div>
+      <div class="slideno">01 / 10</div>
+      <div class="inner">
+        <div class="brand">
+          <span class="fpt-word">FPT</span>
+          <span class="fpt-tag">We believe in innovation</span>
+        </div>
+        <p class="eyebrow">Giới thiệu công nghệ</p>
+        <h1>LiteLLM — Trung tâm điều phối AI cho doanh nghiệp</h1>
+        <p class="sub">Phần mềm mã nguồn mở kết nối ứng dụng của bạn với hàng trăm mô hình AI (OpenAI, Claude, Gemini, FPT-AI…). Giúp doanh nghiệp dùng AI tiết kiệm, ổn định và an toàn — quản lý tập trung từ một nơi.</p>
+        <div class="rule"></div>
+        <div class="chips">
+          <span class="chip"><b>57.985</b> sao GitHub (04/09/2026)</span>
+          <span class="chip"><b>100+</b> nhà cung cấp AI</span>
+          <span class="chip"><b>v1.99.1</b> phiên bản mới nhất</span>
+          <span class="chip"><b>Mã nguồn mở</b>, miễn phí</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2 · Cách hoạt động -->
+    <section class="slide" aria-label="Cách LiteLLM hoạt động">
+      <div class="bar"></div>
+      <div class="slideno">02 / 10</div>
+      <div class="inner">
+        <p class="eyebrow">Cách thức hoạt động</p>
+        <h2>Một cổng trung gian đặt giữa ứng dụng và các mô hình AI</h2>
+        <p class="sub">Ứng dụng chỉ gửi yêu cầu về một cổng duy nhất. LiteLLM lo phần nói chuyện với từng nhà cung cấp cho bạn.</p>
+        <div class="single-flow">
+          <div class="sf-apps">
+            <div class="sf-app">Web Chat</div>
+            <div class="sf-app">AI Coding</div>
+            <div class="sf-app">Trợ lý nội bộ</div>
+          </div>
+          <div class="sf-conn">
+            <span class="arr req">&#8594;</span>
+            <span class="arr resp">&#8592;</span>
+          </div>
+          <div class="sf-hub">LiteLLM<small>Proxy / Gateway</small></div>
+          <div class="sf-conn">
+            <span class="arr req">&#8594;</span>
+            <span class="arr resp">&#8592;</span>
+          </div>
+          <div class="sf-providers">
+            <div class="sf-provider" style="--c:#10A37F">OpenAI</div>
+            <div class="sf-provider" style="--c:#D97757">Claude</div>
+            <div class="sf-provider" style="--c:#4285F4">Gemini</div>
+            <div class="sf-provider" style="--c:#E4002B">FPT-AI</div>
+          </div>
+        </div>
+        <div class="legend">
+          <div class="li req"><span class="sw">&#8594;</span><span><b>Request:</b> Ứng dụng &#8594; LiteLLM &#8594; Nhà cung cấp AI</span></div>
+          <div class="li resp"><span class="sw">&#8592;</span><span><b>Response:</b> Nhà cung cấp AI &#8594; LiteLLM &#8594; Ứng dụng</span></div>
+        </div>
+        <div class="analogies">
+          <div class="analogy">
+            <div class="t">Phiên dịch viên</div>
+            <p>Chuẩn hóa mọi mô hình về một cách nói chung — bạn đổi mô hình chỉ bằng thay đổi cấu hình, không phải sửa code.</p>
+          </div>
+          <div class="analogy">
+            <div class="t">Người gác cổng và giữ sổ</div>
+            <p>Kiểm soát ai được dùng, dùng bao nhiêu, có an toàn hay không — tất cả gom về một điểm quản trị.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3 · Nền tảng kỹ thuật và bản quyền -->
+    <section class="slide" aria-label="Nền tảng kỹ thuật và bản quyền">
+      <div class="bar"></div>
+      <div class="slideno">03 / 10</div>
+      <div class="inner">
+        <p class="eyebrow">Nền tảng kỹ thuật &amp; bản quyền</p>
+        <h2>Tốc độ xử lý nhanh, mã nguồn mở</h2>
+        <p class="sub">Hai điều giúp doanh nghiệp yên tâm trước khi áp dụng.</p>
+        <div class="facts">
+          <div class="fact">
+            <span class="k">Kiến trúc</span>
+            <span class="v">Lõi Rust<small>+ Python SDK</small></span>
+            <p>Lõi xử lý chính viết bằng Rust để chạy nhanh và ít độ trễ; kèm bộ SDK Python tiện cho lập trình viên.</p>
+          </div>
+          <div class="fact">
+            <span class="k">Bản quyền</span>
+            <span class="v">MIT (Cộng đồng)<small>+ Enterprise (trả phí)</small></span>
+            <p>Bản miễn phí dùng được cho hầu hết nhu cầu. Bản Enterprise thêm SSO, audit nâng cao và hỗ trợ 24/7.</p>
+          </div>
+        </div>
+        <p class="micro">Nhờ lõi Rust, LiteLLM giữ độ trễ thấp dù là lớp trung gian — yếu tố quan trọng với ứng dụng AI.</p>
+      </div>
+    </section>
+
+    <!-- SLIDE 4 · Chức năng 1/2 -->
+    <section class="slide" aria-label="Chức năng chính phần một">
+      <div class="bar"></div>
+      <div class="slideno">04 / 10</div>
+      <div class="inner">
+        <p class="eyebrow">Các chức năng chính — phần 1/2</p>
+        <h2>Kết nối dễ dàng, chi phí rõ ràng, tốc độ được kiểm soát</h2>
+        <div class="grid">
+          <div class="card">
+            <div class="num">01</div>
+            <b>Cổng AI thống nhất</b>
+            <p>Mọi mô hình nói chung một chuẩn. Viết code một lần; đổi model hoặc nhà cung cấp chỉ bằng cấu hình.</p>
+          </div>
+          <div class="card">
+            <div class="num">02</div>
+            <b>Quản lý chi phí và ngân sách</b>
+            <p>Đặt hạn mức tiêu dùng cho từng phòng ban, dự án hay người dùng; nhận cảnh báo sớm khi sắp vượt.</p>
+          </div>
+          <div class="card">
+            <div class="num">03</div>
+            <b>Giới hạn tốc độ</b>
+            <p>Kiểm soát số request và token mỗi phút; khi quá tải thì tự xếp hàng chờ thay vì bị từ chối.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5 · Chức năng 2/2 -->
+    <section class="slide" aria-label="Chức năng chính phần hai">
+      <div class="bar"></div>
+      <div class="slideno">05 / 10</div>
+      <div class="inner">
+        <p class="eyebrow">Các chức năng chính — phần 2/2</p>
+        <h2>Ổn định khi gặp sự cố, an toàn khi cấp quyền, rõ ràng khi tra cứu</h2>
+        <div class="grid">
+          <div class="card">
+            <div class="num">04</div>
+            <b>Dự phòng và cân bằng tải</b>
+            <p>Một nhà cung cấp gặp sự cố thì tự chuyển sang mô hình dự phòng; chia tải để không bị nghẽn.</p>
+          </div>
+          <div class="card">
+            <div class="num">05</div>
+            <b>Khóa ảo và phân quyền</b>
+            <p>Dùng khóa ảo thay khóa thật, gán vai trò admin/user/viewer và thu hồi quyền tức thì khi cần.</p>
+          </div>
+          <div class="card">
+            <div class="num">06</div>
+            <b>Giám sát và nhật ký</b>
+            <p>Lưu vết mọi cuộc gọi AI cùng chi phí; xem trên bảng điều khiển trực quan hoặc nối vào công cụ sẵn có của đội.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6 · Ưu điểm -->
+    <section class="slide" aria-label="Ưu điểm nổi bật">
+      <div class="bar"></div>
+      <div class="slideno">06 / 10</div>
+      <div class="inner">
+        <p class="eyebrow">Đánh giá từ cộng đồng</p>
+        <h2>Ưu điểm nổi bật của LiteLLM</h2>
+        <div class="rows">
+          <div class="row good">
+            <div class="mk">&#10003;</div>
+            <div class="body">
+              <b>Dễ bắt đầu</b>
+              <span>Cài đặt nhanh, đổi địa chỉ kết nối là dùng được — không phải viết lại code.</span>
+            </div>
+          </div>
+          <div class="row good">
+            <div class="mk">&#10003;</div>
+            <div class="body">
+              <b>Cộng đồng lớn, phát triển nhanh</b>
+              <span>Gần 58.000 sao GitHub; bản mới ra gần như hằng tuần; tài liệu đầy đủ và có ví dụ cụ thể.</span>
+            </div>
+          </div>
+          <div class="row good">
+            <div class="mk">&#10003;</div>
+            <div class="body">
+              <b>Tiết kiệm công sức phát triển</b>
+              <span>Khỏi tự xây các hệ thống tính phí, giới hạn tốc độ và giám sát từ đầu.</span>
+            </div>
+          </div>
+          <div class="row good">
+            <div class="mk">&#10003;</div>
+            <div class="body">
+              <b>Linh hoạt triển khai</b>
+              <span>Chạy như một cổng riêng hoặc gọi như thư viện; phù hợp từ startup đến tập đoàn.</span>
+            </div>
+          </div>
+          <div class="row good">
+            <div class="mk">&#10003;</div>
+            <div class="body">
+              <b>Bản miễn phí đủ dùng</b>
+              <span>Bản Enterprise thêm SSO, audit nâng cao và hỗ trợ 24/7 — chỉ khi doanh nghiệp cần.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7 · Điều cần cân nhắc -->
+    <section class="slide" aria-label="Điều cần cân nhắc">
+      <div class="bar"></div>
+      <div class="slideno">07 / 10</div>
+      <div class="inner">
+        <p class="eyebrow">Đánh giá từ cộng đồng</p>
+        <h2>Điều cần cân nhắc trước khi áp dụng</h2>
+        <div class="rows">
+          <div class="row con">
+            <div class="mk">&#8594;</div>
+            <div class="body">
+              <b>Thêm một chút độ trễ</b>
+              <span>Vài chục mili-giây cho mỗi yêu cầu. Với ứng dụng thời gian thực (như thoại), nên gọi thẳng nhà cung cấp.</span>
+            </div>
+          </div>
+          <div class="row con">
+            <div class="mk">&#8594;</div>
+            <div class="body">
+              <b>Cấu hình nâng cao cần kỹ lưỡng</b>
+              <span>Khi tích hợp nhiều nhà cung cấp, file cấu hình khá phức tạp — cần đọc kỹ tài liệu và chạy thử.</span>
+            </div>
+          </div>
+          <div class="row con">
+            <div class="mk">&#8594;</div>
+            <div class="body">
+              <b>Một số tính năng cao cấp có phí</b>
+              <span>SSO, audit chi tiết và hỗ trợ nhiều vùng (multi-region) nằm ở bản Enterprise.</span>
+            </div>
+          </div>
+          <div class="row con">
+            <div class="mk">&#8594;</div>
+            <div class="body">
+              <b>Lưu lượng rất lớn cần hạ tầng tốt</b>
+              <span>Cần tinh chỉnh worker và bộ nhớ dùng chung (Redis) để cổng không trở thành nút thắt.</span>
+            </div>
+          </div>
+          <div class="row con">
+            <div class="mk">&#8594;</div>
+            <div class="body">
+              <b>Ràng buộc khi dùng sâu</b>
+              <span>Dùng nhiều tính năng riêng thì sau này muốn đổi nền tảng khác sẽ cần thêm công sức.</span>
+            </div>
+          </div>
+        </div>
+        <p class="softnote">Phần lớn các điểm trên đều <b>giảm thiểu được</b> bằng cấu hình đúng và chạy thử ở quy mô nhỏ trước.</p>
+      </div>
+    </section>
+
+    <!-- SLIDE 8 · Cộng đồng -->
+    <section class="slide" aria-label="Cộng đồng và độ tin cậy">
+      <div class="bar"></div>
+      <div class="slideno">08 / 10</div>
+      <div class="inner">
+        <p class="eyebrow">Cộng đồng &amp; độ tin cậy</p>
+        <h2>Được cộng đồng toàn cầu tin dùng</h2>
+        <div class="stats">
+          <div class="stat"><div class="num">57.985</div><div class="lbl">Sao GitHub (04/09/2026)</div></div>
+          <div class="stat"><div class="num">100+</div><div class="lbl">Nhà cung cấp AI</div></div>
+          <div class="stat"><div class="num">v1.99.1</div><div class="lbl">Cập nhật liên tục</div></div>
+          <div class="stat"><div class="num">Nhanh</div><div class="lbl">Phản hồi lỗ hổng</div></div>
+        </div>
+        <p class="micro">Số sao tăng mỗi ngày (khoảng 58.000). Đây là chỉ số uy tín phản ánh việc sử dụng rộng rãi trên toàn cầu.</p>
+        <div class="panel" style="margin-top:26px">
+          <p class="plabel">Điều đó có ý nghĩa gì với bạn</p>
+          <p style="margin:0;font-size:1.06rem;line-height:1.7;color:var(--ink-soft);font-weight:500">Cộng đồng lớn đồng nghĩa với tài liệu phong phú, lỗi được phát hiện và sửa nhanh, cùng nhiều kinh nghiệm triển khai thực tế từ các doanh nghiệp khác.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9 · Bảo mật -->
+    <section class="slide" aria-label="Bảo mật minh bạch">
+      <div class="bar"></div>
+      <div class="slideno">09 / 10</div>
+      <div class="inner">
+        <p class="eyebrow">Bảo mật</p>
+        <h2>10 lỗ hổng đã xác nhận — và đều đã có bản vá</h2>
+        <p class="sub">Tính đến 04/09/2026, LiteLLM có <b>10 lỗ hổng</b> được GitHub chính thức xác nhận (Security Advisories). Trình bày công khai để minh bạch, không che giấu.</p>
+        <div class="sevrow">
+          <span class="sev-pill c"><b>2</b> Critical</span>
+          <span class="sev-pill h"><b>2</b> High</span>
+          <span class="sev-pill m"><b>4</b> Moderate</span>
+          <span class="sev-pill l"><b>2</b> Low</span>
+          <span class="sev-pill">Phân loại theo GitHub</span>
+        </div>
+        <div class="sec-list">
+          <div class="sec-item"><span class="sev c">Critical</span><span>Chèn lệnh vào truy vấn dữ liệu khi xác minh khóa API</span></div>
+          <div class="sec-item"><span class="sev c">Critical</span><span>Vượt xác thực bằng cách giả mạo tiêu đề Host</span></div>
+          <div class="sec-item"><span class="sev h">High</span><span>Vượt xác thực kết nối MCP qua cơ chế OAuth2 dự phòng</span></div>
+          <div class="sec-item"><span class="sev h">High</span><span>Thực thi lệnh từ xa qua endpoint kiểm thử MCP stdio</span></div>
+          <div class="sec-item"><span class="sev m">Moderate</span><span>Thoát khỏi vùng cách ly (sandbox) của lớp bảo vệ mã tùy chỉnh</span></div>
+          <div class="sec-item"><span class="sev m">Moderate</span><span>Mượn máy chủ gọi vào hệ thống nội bộ (SSRF) qua tham số định tuyến</span></div>
+          <div class="sec-item"><span class="sev m">Moderate</span><span>Ghi file tùy ý khi giải nén kho lưu trữ Skills</span></div>
+          <div class="sec-item"><span class="sev m">Moderate</span><span>Mượn máy chủ gọi vào hệ thống nội bộ (SSRF) qua tham số cấu hình</span></div>
+          <div class="sec-item"><span class="sev l">Low</span><span>Đọc file nội bộ qua tham chiếu tệp OIDC do người gửi kiểm soát</span></div>
+          <div class="sec-item"><span class="sev l">Low</span><span>Bỏ qua lớp kiểm tra an toàn mã tùy chỉnh ở các endpoint chính thức</span></div>
+        </div>
+        <p class="micro" style="margin-top:18px;color:#6B7280">Tất cả đều đã được vá. Việc quan trọng nhất với doanh nghiệp: <b style="color:var(--fpt-red-dark)">luôn cập nhật phiên bản mới</b> để nhận các bản vá kịp thời.</p>
+      </div>
+    </section>
+
+    <!-- SLIDE 10 · Kết luận -->
+    <section class="slide" aria-label="Kết luận và khuyến nghị">
+      <div class="bar"></div>
+      <div class="slideno">10 / 10</div>
+      <div class="inner">
+        <p class="eyebrow">Kết luận</p>
+        <h2>LiteLLM có phù hợp với doanh nghiệp của bạn?</h2>
+        <div class="cols">
+          <div class="col good">
+            <h3><span class="mk">&#10003;</span> Nên dùng nếu</h3>
+            <ul>
+              <li><span class="mk">&#10003;</span><span>Dùng nhiều mô hình AI mà muốn <b>tiết kiệm chi phí</b> và giảm công phát triển.</span></li>
+              <li><span class="mk">&#10003;</span><span>Cần <b>kiểm soát tập trung</b>: khóa API, hạn mức chi tiêu, phân quyền.</span></li>
+              <li><span class="mk">&#10003;</span><span>Xây AI Agent cần <b>tự chuyển model</b> khi một nhà cung cấp gặp sự cố.</span></li>
+            </ul>
+          </div>
+          <div class="col alt">
+            <h3><span class="mk">&#8594;</span> Cân nhắc khác nếu</h3>
+            <ul>
+              <li><span class="mk">&#8594;</span><span>Ứng dụng yêu cầu <b>độ trễ cực thấp</b> — nên gọi thẳng nhà cung cấp.</span></li>
+              <li><span class="mk">&#8594;</span><span>Chỉ cần <b>chuyển đổi định dạng đơn giản</b>, chưa cần lớp quản trị.</span></li>
+              <li><span class="mk">&#8594;</span><span>Đội đã có sẵn hạ tầng giám sát và hạch toán riêng.</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="closing">
+          <div class="big">LiteLLM là lựa chọn hàng đầu của cộng đồng để quản lý AI — xứng đáng để doanh nghiệp cân nhắc áp dụng.</div>
+          <div class="tip">Lưu ý: chạy thử quy mô nhỏ trước, đọc kỹ tài liệu khi cấu hình nâng cao, và luôn cập nhật phiên bản mới để nhận bản vá bảo mật.</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>
