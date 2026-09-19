@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ứng dụng AI tại SCC — Bản cuộn dọc · 19/09/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#1A1C1E; --muted:#5F6B70; --line:#DFE3E1;
+  --bg:#FAFAF9; --soft:#F1F3F2;
+  --green:#10A37F; --green2:#19C37D; --amber:#D98A0B; --red:#D0524F; --blue:#2F6FD0;
+  --f-head:'Rubik',-apple-system,'Segoe UI',Roboto,sans-serif;
+  --f-body:'IBM Plex Sans',-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+html,body{height:100%;background:#0E1113;font-family:var(--f-body);-webkit-font-smoothing:antialiased}
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.slide{
+  position:absolute;width:1920px;height:1080px;background:var(--bg);color:var(--ink);
+  transform-origin:center center;display:none;flex-direction:column;
+  padding:104px 120px 132px;overflow:hidden;
+}
+.slide.on{display:flex}
+.slide.soft{background:var(--soft)}
+
+/* ---- header ---- */
+.head{display:flex;gap:26px;align-items:flex-start;margin-bottom:46px;flex:none}
+.bar{width:11px;height:62px;background:var(--green);border-radius:6px;flex:none;margin-top:4px}
+.bar.amber{background:var(--amber)} .bar.blue{background:var(--blue)} .bar.red{background:var(--red)}
+h2.t{font-family:var(--f-head);font-size:64px;font-weight:600;line-height:1.1;letter-spacing:-.5px}
+.sub{font-family:var(--f-body);font-size:30px;color:var(--muted);margin-top:14px;line-height:1.35;font-weight:400}
+.body{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
+.body.top{justify-content:flex-start}
+
+/* ---- footer ---- */
+.foot{position:absolute;left:120px;right:120px;bottom:56px;display:flex;justify-content:space-between;
+  font-size:24px;color:var(--muted);font-weight:400}
+
+/* ---- cover ---- */
+.cover{background:var(--bg);justify-content:center;padding:120px 140px}
+.cover .topband{position:absolute;left:0;top:0;width:100%;height:16px;background:var(--green)}
+.cover h1{font-family:var(--f-head);font-size:104px;font-weight:600;line-height:1.06;letter-spacing:-2px}
+.cover .lead{font-size:42px;color:var(--green);margin-top:32px;font-weight:500}
+.cover .meta{font-size:28px;color:var(--muted);margin-top:96px;line-height:1.7}
+
+/* ---- section divider ---- */
+.sec{background:var(--soft);justify-content:center}
+.sec .kicker{font-size:30px;font-weight:600;color:var(--green);letter-spacing:5px;margin-bottom:26px}
+.sec h2{font-family:var(--f-head);font-size:86px;font-weight:600;line-height:1.1;letter-spacing:-1.2px}
+.sec .rule{width:160px;height:9px;background:var(--green);border-radius:5px;margin-top:44px}
+
+/* ---- big number ---- */
+.big{font-family:var(--f-head);font-size:184px;font-weight:700;line-height:1;color:var(--green);letter-spacing:-5px}
+.big.red{color:var(--red)}
+.bigcap{font-size:38px;margin-top:22px;line-height:1.3;font-weight:500}
+.notes{margin-top:54px;display:flex;flex-direction:column;gap:20px}
+.notes div{font-size:30px;color:var(--muted);line-height:1.45;padding-left:34px;position:relative}
+.notes div:before{content:'';position:absolute;left:0;top:15px;width:16px;height:4px;background:var(--green);border-radius:2px}
+
+/* ---- table ---- */
+table{width:100%;border-collapse:collapse;font-size:29px;line-height:1.35}
+table.sm{font-size:26px}
+table.dense{font-size:25px}
+table.dense th{padding:16px 22px;font-size:24px}
+table.dense td{padding:13px 22px}
+th{background:var(--ink);color:#fff;font-weight:600;text-align:left;padding:22px 24px;font-size:26px}
+th:first-child{border-radius:12px 0 0 0} th:last-child{border-radius:0 12px 0 0}
+td{padding:20px 24px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:nth-child(even) td{background:#fff}
+tr:last-child td{border-bottom:none}
+td.b,th.b{font-weight:600}
+.g{color:var(--green);font-weight:600} .a{color:var(--amber);font-weight:600}
+.r{color:var(--red);font-weight:600} .bl{color:var(--blue);font-weight:600}
+.dim{color:var(--muted)}
+
+/* ---- bullets ---- */
+.bul{display:flex;flex-direction:column;gap:30px}
+.bul .b1{font-size:38px;font-weight:600;line-height:1.3;padding-left:40px;position:relative}
+.bul .b1:before{content:'';position:absolute;left:0;top:18px;width:20px;height:6px;background:var(--green);border-radius:3px}
+.bul .b2{font-size:30px;color:var(--muted);line-height:1.45;padding-left:40px;margin-top:-16px}
+.bul .gap{height:12px}
+.callout{margin-top:40px;background:#fff;border:2px solid var(--line);border-left:10px solid var(--green);
+  border-radius:14px;padding:34px 40px;font-size:32px;line-height:1.4;font-weight:500}
+
+/* ---- cards ---- */
+.cards{display:flex;gap:30px}
+.card{flex:1;background:#fff;border:2px solid var(--line);border-radius:18px;padding:36px 34px;
+  display:flex;flex-direction:column;gap:16px}
+.card h3{font-family:var(--f-head);font-size:32px;font-weight:600;line-height:1.25}
+.card p{font-size:27px;color:var(--muted);line-height:1.45}
+.card .num{font-family:var(--f-head);font-size:72px;font-weight:700;color:var(--green);line-height:1}
+
+/* ---- two column compare ---- */
+.cmp{display:flex;gap:34px}
+.cmp .col{flex:1;display:flex;flex-direction:column}
+.cmp .ch{border-radius:16px 16px 0 0;padding:26px 32px;font-size:32px;font-weight:600;color:#fff}
+.cmp .cb{background:#fff;border:2px solid var(--line);border-top:none;border-radius:0 0 16px 16px;
+  padding:34px 32px;display:flex;flex-direction:column;gap:20px;flex:1}
+.cmp .cb div{font-size:29px;line-height:1.4}
+
+/* ---- layer diagram ---- */
+.layer{border-radius:20px;padding:38px 46px}
+.layer h3{font-family:var(--f-head);font-size:44px;font-weight:600;margin-bottom:14px}
+.layer p{font-size:29px;line-height:1.45}
+.arrow{text-align:center;font-size:46px;color:var(--muted);margin:16px 0}
+
+/* ---- thanks ---- */
+.thx{background:var(--soft);justify-content:center}
+.thx .topband{position:absolute;left:0;top:0;width:100%;height:16px;background:var(--green)}
+.thx h1{font-family:var(--f-head);font-size:88px;font-weight:600;line-height:1.1}
+.thx .sub2{font-size:38px;color:var(--green);margin-top:24px;font-weight:500}
+.thx .pts{margin-top:64px;display:flex;flex-direction:column;gap:20px}
+.thx .pts div{font-size:29px;color:var(--muted);line-height:1.45;padding-left:34px;position:relative}
+.thx .pts div:before{content:'';position:absolute;left:0;top:15px;width:16px;height:4px;background:var(--green);border-radius:2px}
+.qa{margin-top:70px;background:var(--green);color:#fff;border-radius:18px;padding:26px 62px;
+  font-family:var(--f-head);font-size:54px;font-weight:700;letter-spacing:4px;align-self:flex-start}
+
+/* ---- chrome ---- */
+#prog{position:fixed;left:0;bottom:0;height:5px;background:var(--green);transition:width .18s;z-index:10}
+#hud{position:fixed;right:22px;bottom:18px;color:#8A9499;font-size:15px;font-family:var(--f-body);
+  letter-spacing:1px;z-index:10;user-select:none}
+#hint{position:fixed;left:22px;bottom:18px;color:#5A646A;font-size:14px;z-index:10;transition:opacity .5s}
+@media print{
+  html,body{background:#fff} #stage{position:static;display:block;overflow:visible}
+  #prog,#hud,#hint{display:none}
+  .slide{display:flex!important;position:relative;transform:none!important;
+    page-break-after:always;break-after:page;box-shadow:none;margin:0}
+}
+
+/* ====== bản cuộn dọc ====== */
+html,body{background:#EEF0EF;height:auto;overflow-x:hidden}
+#app{display:flex;align-items:flex-start;min-height:100vh}
+
+/* mục lục */
+#toc{position:sticky;top:0;width:340px;flex:none;height:100vh;overflow-y:auto;
+  background:#14171A;color:#C9D1D4;padding:34px 26px 60px}
+#toc h4{font-family:var(--f-head);font-size:19px;color:#fff;font-weight:600;line-height:1.35}
+#toc .dk{font-size:13px;color:#7E8B90;margin-top:8px;margin-bottom:26px;line-height:1.5}
+#toc .grp{font-size:12px;letter-spacing:2.2px;color:var(--green2);font-weight:600;
+  margin:24px 0 10px;text-transform:uppercase}
+#toc a{display:flex;gap:11px;align-items:baseline;color:#C9D1D4;text-decoration:none;
+  font-size:15px;line-height:1.4;padding:8px 10px;border-radius:8px;transition:.15s}
+#toc a:hover{background:#1F2428;color:#fff}
+#toc a.act{background:var(--green);color:#fff;font-weight:500}
+#toc a i{font-style:normal;font-size:12px;color:#6E7B80;min-width:22px;font-variant-numeric:tabular-nums}
+#toc a.act i{color:#CBEFE4}
+#toggle{display:none}
+
+/* vùng slide */
+#reel{flex:1;min-width:0;padding:40px 48px 120px}
+#reel .top{max-width:1400px;margin:0 auto 34px}
+#reel .top h1{font-family:var(--f-head);font-size:34px;font-weight:600;color:var(--ink);line-height:1.25}
+#reel .top p{font-size:16px;color:var(--muted);margin-top:10px}
+.frame{max-width:1400px;margin:0 auto 46px;position:relative}
+.frame .tag{position:absolute;left:-14px;top:-14px;background:var(--ink);color:#fff;
+  font-size:14px;font-weight:600;padding:7px 15px;border-radius:9px;z-index:2;
+  font-variant-numeric:tabular-nums;box-shadow:0 3px 10px rgba(0,0,0,.22)}
+.box{width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;border-radius:16px;
+  box-shadow:0 5px 26px rgba(20,23,26,.14);background:var(--bg)}
+.box .slide{display:flex!important;position:absolute;left:0;top:0;transform-origin:top left}
+
+@media (max-width:1080px){
+  #toc{position:fixed;left:0;top:0;transform:translateX(-100%);transition:.25s;z-index:30;width:300px}
+  #toc.open{transform:none}
+  #toggle{display:block;position:fixed;left:14px;top:14px;z-index:31;background:var(--ink);
+    color:#fff;border:none;border-radius:10px;padding:11px 15px;font-size:15px;cursor:pointer;
+    font-family:var(--f-body);box-shadow:0 3px 10px rgba(0,0,0,.25)}
+  #reel{padding:70px 20px 90px}
+}
+@media print{
+  html,body{background:#fff}
+  #toc,#toggle,#reel .top,.frame .tag{display:none!important}
+  #app{display:block} #reel{padding:0}
+  .frame{max-width:none;margin:0;page-break-after:always;break-after:page}
+  .box{border-radius:0;box-shadow:none}
+}
+</style>
+</head>
+<body>
+<button id="toggle">☰ Mục lục</button>
+<div id="app"><nav id="toc"><h4>Ứng dụng AI tại SCC</h4><div class="dk">Báo cáo Ban Giám đốc · 19/09/2026<br>31 slide</div><div class="grp">Mở đầu</div><a href="#s1"><i>01</i><span>Ứng dụng AI tại SCC</span></a><a href="#s2"><i>02</i><span>Nội dung trình bày</span></a><div class="grp">Chính sách Sử dụng AI</div><a href="#s3"><i>03</i><span>Chính sách Sử dụng AI</span></a><a href="#s4"><i>04</i><span>Dữ liệu nào, công cụ nào</span></a><a href="#s5"><i>05</i><span>Kết quả đối chiếu</span></a><a href="#s6"><i>06</i><span>Theo từng phòng</span></a><a href="#s7"><i>07</i><span>Nguyên nhân: thiếu đường dùng hợp lệ</span></a><a href="#s8"><i>08</i><span>Đường gỡ: hai lớp, không phải hai lựa chọn</span></a><a href="#s9"><i>09</i><span>Vì sao dựng Gateway trước</span></a><div class="grp">Review Danh mục AI</div><a href="#s10"><i>10</i><span>Review Danh mục AI</span></a><a href="#s11"><i>11</i><span>Bức tranh công việc 4 phòng</span></a><a href="#s12"><i>12</i><span>Khâu nào đã có AI, khâu nào chưa</span></a><a href="#s13"><i>13</i><span>Ba nhận xét</span></a><a href="#s14"><i>14</i><span>Cơ hội 1 — Nhân mô hình đã chạy được</span></a><a href="#s15"><i>15</i><span>Cơ hội 2 — Nhóm việc lớn chưa chạm AI</span></a><a href="#s16"><i>16</i><span>Cơ hội 3 — Nâng mức uỷ quyền</span></a><a href="#s17"><i>17</i><span>Chất lượng danh mục</span></a><a href="#s18"><i>18</i><span>Cách kiểm định kết quả AI</span></a><a href="#s19"><i>19</i><span>Một trùng khớp đáng chú ý</span></a><div class="grp">Vị trí CASAN và lộ trình Quý 4</div><a href="#s20"><i>20</i><span>Vị trí CASAN và lộ trình Quý 4</span></a><a href="#s21"><i>21</i><span>SCC đang ở đâu so với CASAN Cấp 3</span></a><a href="#s22"><i>22</i><span>Chi tiết hạng mục — đặc điểm 1 đến 3</span></a><a href="#s23"><i>23</i><span>Chi tiết hạng mục — đặc điểm 4 và 5</span></a><a href="#s24"><i>24</i><span>Chi tiết hạng mục — đặc điểm 6 · Kỹ thuật</span></a><a href="#s25"><i>25</i><span>Tám hạng mục còn thiếu — ai làm gì</span></a><a href="#s26"><i>26</i><span>Sáu hạng mục một phần — đóng nhanh hơn</span></a><a href="#s27"><i>27</i><span>Lộ trình Quý 4</span></a><div class="grp">Việc thực hiện tiếp theo</div><a href="#s28"><i>28</i><span>Việc thực hiện tiếp theo</span></a><a href="#s29"><i>29</i><span>Tháng 10</span></a><a href="#s30"><i>30</i><span>Tháng 11 và 12</span></a><a href="#s31"><i>31</i><span>Xin cảm ơn Ban Giám đốc</span></a></nav><div id="reel"><div class="top"><h1>Ứng dụng AI tại SCC — Kết quả rà soát chính sách và danh mục AI</h1><p>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026 · 31 slide · Ctrl+P để xuất PDF</p></div><div class="frame" id="s1"><div class="tag">01</div><div class="box"><section class="slide cover"><div class="topband"></div>
+<h1>Ứng dụng AI tại SCC</h1>
+<div class="lead">Kết quả rà soát chính sách và danh mục AI</div>
+<div class="meta">Trung tâm SCC · Báo cáo Ban Giám đốc<br>19 tháng 9, 2026</div></section></div></div><div class="frame" id="s2"><div class="tag">02</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Nội dung trình bày</h2></div></div><div class="body top">
+<table><tr><th style="width:12%">Phần</th><th style="width:62%">Nội dung</th><th style="width:26%">Slide</th></tr>
+<tr><td class="b">1</td><td>Chính sách Sử dụng AI — đối chiếu và phương án</td><td class="dim">04 – 09</td></tr>
+<tr><td class="b">2</td><td>Review Danh mục AI — công việc 4 phòng</td><td class="dim">11 – 19</td></tr>
+<tr><td class="b">3</td><td>Vị trí CASAN và lộ trình Quý 4</td><td class="dim">21 – 27</td></tr>
+<tr><td class="b">4</td><td>Việc thực hiện tiếp theo</td><td class="dim">29 – 30</td></tr>
+</table></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>01</span></div></section></div></div><div class="frame" id="s3"><div class="tag">03</div><div class="box"><section class="slide sec"><div class="kicker">PHẦN 1</div><h2>Chính sách Sử dụng AI</h2><div class="rule"></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>02</span></div></section></div></div><div class="frame" id="s4"><div class="tag">04</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Dữ liệu nào, công cụ nào</h2><div class="sub">Bảng phân nhóm công cụ là đề xuất, chờ phê duyệt</div></div></div><div class="body">
+<table><tr><th style="width:30%">Dữ liệu đang dùng</th>
+<th style="width:35%">Claude · Claude Code · n8n · LLM nội bộ FPT</th>
+<th style="width:35%">ChatGPT · Gemini · Copilot · Figma · Napkin</th></tr>
+<tr><td class="b">Cấp 1 — đã công khai</td><td class="g">Được dùng</td><td class="g">Được dùng</td></tr>
+<tr><td class="b">Cấp 2 — nội bộ</td><td class="g">Được dùng</td><td class="r">Không được</td></tr>
+<tr><td class="b">Cấp 3 — nhạy cảm</td><td class="a">Phải duyệt riêng</td><td class="r">Không được</td></tr>
+<tr><td class="b">Cấp 4 — PII, mật khẩu, khoá</td><td class="r">Không được</td><td class="r">Không được</td></tr>
+</table></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>03</span></div></section></div></div><div class="frame" id="s5"><div class="tag">05</div><div class="box"><section class="slide "><div class="head"><div class="bar red"></div><div><h2 class="t">Kết quả đối chiếu</h2></div></div><div class="body">
+<div class="big red">43 / 50</div>
+<div class="bigcap">nhóm việc đang chạy AI cần xử lý — <b>86%</b></div>
+<div class="notes">
+<div><b>34 nhóm việc</b> · dữ liệu Cấp 2 trên công cụ công cộng</div>
+<div><b>9 nhóm việc</b> · dữ liệu Cấp 3 trên công cụ công cộng — ưu tiên cao nhất</div>
+<div><b>7 nhóm việc</b> · cần làm rõ thêm</div>
+</div></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>04</span></div></section></div></div><div class="frame" id="s6"><div class="tag">06</div><div class="box"><section class="slide "><div class="head"><div class="bar red"></div><div><h2 class="t">Theo từng phòng</h2></div></div><div class="body">
+<table class="sm"><tr><th style="width:14%">Phòng</th><th style="width:13%">Đang chạy</th>
+<th style="width:15%">Cần xử lý</th><th style="width:10%">Cấp 3</th><th style="width:48%">Nhóm công việc chính bị đánh dấu</th></tr>
+<tr><td class="b">HT-VOIP</td><td>8</td><td class="r">8 — 100%</td><td class="r b">6</td><td>Core VoIP · SIP trace · CDR · Cấu hình nền tảng</td></tr>
+<tr><td class="b">R&amp;D</td><td>30</td><td class="a">27 — 90%</td><td>0</td><td>Phát triển sản phẩm phần mềm (25) · Vận hành hệ thống (2)</td></tr>
+<tr><td class="b">VH</td><td>10</td><td class="a">7 — 70%</td><td class="a b">3</td><td>Rà soát hạ tầng · Pool IP · Báo cáo vận hành · Quản trị</td></tr>
+<tr><td class="b">DV</td><td>2</td><td>1 — 50%</td><td>0</td><td>Quản lý dự án và tiếp nhận việc vận hành mới</td></tr>
+</table></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>05</span></div></section></div></div><div class="frame" id="s7"><div class="tag">07</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Nguyên nhân: thiếu đường dùng hợp lệ</h2></div></div><div class="body"><div class="bul">
+<div class="b1">Cả 43 nhóm việc cần xử lý đều dính ChatGPT hoặc Gemini</div>
+<div class="b2">Hai công cụ phổ biến nhất mà công ty chưa cấp tài khoản doanh nghiệp</div>
+<div class="gap"></div>
+<div class="b1">Mục 5.1 — dùng công cụ doanh nghiệp với dữ liệu nội bộ: <span class="r">3 / 46</span></div>
+<div class="b1">Mục 5.2 — không đưa dữ liệu nội bộ lên công cụ công cộng: <span class="r">7 / 50</span></div>
+</div>
+<div class="callout">Đây là vấn đề của tổ chức, không phải của người dùng</div></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>06</span></div></section></div></div><div class="frame" id="s8"><div class="tag">08</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Đường gỡ: hai lớp, không phải hai lựa chọn</h2></div></div><div class="body">
+<div class="layer" style="background:var(--green);color:#fff">
+<h3>AI Gateway — lớp kiểm soát</h3>
+<p>Policy theo cấp dữ liệu · Phân quyền · Nhật ký truy cập</p>
+<p style="margin-top:12px;font-weight:600">SCC làm được ngay</p></div>
+<div class="arrow">↓</div>
+<div class="layer" style="background:#fff;border:2px solid var(--line)">
+<h3>Lớp mô hình — đang chờ</h3>
+<p class="dim">LLM nội bộ FPT · LLM đơn vị thành viên · Mô hình bên ngoài</p>
+<p style="margin-top:12px;font-weight:600;color:var(--red)">Nhiều đơn vị FPT cùng cung cấp, chưa chốt dùng của ai</p></div>
+<div class="callout" style="margin-top:34px">Gateway không phải là mô hình — nó là lớp kiểm soát và điều hướng</div>
+</div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>07</span></div></section></div></div><div class="frame" id="s9"><div class="tag">09</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Vì sao dựng Gateway trước</h2></div></div><div class="body"><div class="cards">
+<div class="card"><div class="num">1</div><h3>Đảo ngược được</h3>
+<p>Khi chốt mô hình, chỉ đổi backend — giữ nguyên policy và nhật ký</p></div>
+<div class="card"><div class="num">2</div><h3>Rủi ro đang phát sinh</h3>
+<p>Hằng ngày, và không phụ thuộc việc chọn mô hình nào</p></div>
+<div class="card"><div class="num">3</div><h3>Sinh nhật ký và số đo</h3>
+<p>Nền cho cả đo hiệu quả lẫn hồ sơ CASAN</p></div>
+</div>
+<div class="callout" style="margin-top:44px">Gateway là điều kiện cần — không tự động đóng mọi tiêu chí</div></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>08</span></div></section></div></div><div class="frame" id="s10"><div class="tag">10</div><div class="box"><section class="slide sec"><div class="kicker">PHẦN 2</div><h2>Review Danh mục AI</h2><div class="rule"></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>09</span></div></section></div></div><div class="frame" id="s11"><div class="tag">11</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Bức tranh công việc 4 phòng</h2><div class="sub">86 nhóm việc · 50 nhóm việc đã chạm AI</div></div></div><div class="body">
+<table><tr><th style="width:22%">Phòng</th><th style="width:19%">Nhóm việc</th>
+<th style="width:21%">Đang dùng / thử</th><th style="width:19%">Chưa chạm AI</th><th style="width:19%">% việc có AI</th></tr>
+<tr><td class="b">R&amp;D</td><td>34</td><td>30</td><td>4</td><td class="g">88%</td></tr>
+<tr><td class="b">HT-VOIP</td><td>17</td><td>8</td><td>9</td><td class="a">47%</td></tr>
+<tr><td class="b">VH</td><td>28</td><td>10</td><td class="r b">18</td><td class="a">36%</td></tr>
+<tr><td class="b">DV</td><td>7</td><td>2</td><td>5</td><td class="a">29%</td></tr>
+<tr><td class="b">Toàn SCC</td><td class="b">86</td><td class="b">50</td><td class="b">36</td><td class="b">58%</td></tr>
+</table></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>10</span></div></section></div></div><div class="frame" id="s12"><div class="tag">12</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Khâu nào đã có AI, khâu nào chưa</h2></div></div><div class="body">
+<table class="sm"><tr><th style="width:14%">Phòng</th><th style="width:45%">Đã có AI</th><th style="width:41%">Chưa chạm</th></tr>
+<tr><td class="b">R&amp;D</td><td>Gần hết vòng đời phát triển — code, test, thiết kế, tài liệu</td><td class="dim">4 nhóm việc phân tích nghiệp vụ</td></tr>
+<tr><td class="b">HT-VOIP</td><td>Nghiệp vụ kỹ thuật lõi — SBC, SIP trace, CDR, cấu hình</td><td class="dim">Xử lý ticket HT/SC · đối soát cước</td></tr>
+<tr><td class="b">VH</td><td>Mảng hỗ trợ — xử lý HT cấp 1 và L2</td><td class="dim">Khách hàng · sự cố · hạ tầng — 18 nhóm việc</td></tr>
+<tr><td class="b">DV</td><td>Quản lý dự án · nghiên cứu framework</td><td class="dim">Kiểm soát tuân thủ · SLA · khảo sát KH</td></tr>
+</table></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>11</span></div></section></div></div><div class="frame" id="s13"><div class="tag">13</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Ba nhận xét</h2></div></div><div class="body"><div class="bul">
+<div class="b1">AI đang ở khâu tạo nội dung, chưa chạm khâu vận hành trực tiếp</div>
+<div class="b2">R&amp;D phủ 88% vì phần lớn là soạn thảo, viết code. VH và DV làm sự cố, kiểm soát, khách hàng — dữ liệu nhạy cảm hơn</div>
+<div class="gap"></div>
+<div class="b1">Phần chưa chạm AI vướng công cụ, không vướng kỹ thuật</div>
+<div class="b2">16 trong 36 nhóm việc chưa chạm AI ở dữ liệu Cấp 3 — chủ yếu tại VH và HT-VOIP</div>
+<div class="gap"></div>
+<div class="b1">Độ sâu quan trọng hơn độ phủ</div>
+<div class="b2">30 nhóm việc ở mức L1, 20 ở L2, không nhóm nào từ L3. HT-VOIP và DV còn L1 hoàn toàn</div>
+</div></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>12</span></div></section></div></div><div class="frame" id="s14"><div class="tag">14</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Cơ hội 1 — Nhân mô hình đã chạy được</h2><div class="sub">Lời giải đã có sẵn trong nội bộ trung tâm</div></div></div><div class="body"><div class="cmp">
+<div class="col"><div class="ch" style="background:var(--green)">VH đã làm được</div>
+<div class="cb"><div><b>VH-009 · VH-010</b></div><div>Xử lý HT cấp L1 và L2</div>
+<div>Chạy trên <b>LLM nội bộ FPT</b></div><div class="g">Đúng chuẩn công cụ doanh nghiệp</div></div></div>
+<div class="col"><div class="ch" style="background:var(--red)">HT-VOIP đang thiếu</div>
+<div class="cb"><div><b>HT-011</b></div><div>Xử lý ticket HT và SC</div>
+<div>Đang ở trạng thái <b>Đề xuất</b></div><div class="r">Cùng loại nghiệp vụ</div></div></div>
+</div></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>13</span></div></section></div></div><div class="frame" id="s15"><div class="tag">15</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Cơ hội 2 — Nhóm việc lớn chưa chạm AI</h2><div class="sub">VH-008 là ứng viên pilot tốt nhất — bài toán phân loại, đo accuracy được ngay</div></div></div><div class="body">
+<table><tr><th style="width:14%">Mã</th><th style="width:54%">Nhóm việc</th><th style="width:18%">Giờ/tháng</th><th style="width:14%">Cấp DL</th></tr>
+<tr><td class="b">VH-004</td><td>Kiểm tra trước/sau khi khách hàng bảo trì</td><td class="b">1.166,7</td><td class="r">3</td></tr>
+<tr><td class="b">VH-006</td><td>Xử lý sự cố cấp độ L1</td><td>500,0</td><td class="r">3</td></tr>
+<tr><td class="b">VH-008</td><td>Nhận định case SOC ATTT</td><td>500,0</td><td class="r">3</td></tr>
+<tr><td class="b">VH-017</td><td>Mô tả nghiệp vụ, test tool cho dự án</td><td>344,0</td><td class="a">2</td></tr>
+<tr><td class="b">DV-001</td><td>Kiểm soát tuân thủ vận hành</td><td>84,0</td><td class="a">2</td></tr>
+</table></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>14</span></div></section></div></div><div class="frame" id="s16"><div class="tag">16</div><div class="box"><section class="slide "><div class="head"><div class="bar blue"></div><div><h2 class="t">Cơ hội 3 — Nâng mức uỷ quyền</h2></div></div><div class="body"><div class="bul">
+<div class="b1">HT-VOIP và DV đang ở L1 hoàn toàn</div>
+<div class="b2">AI mới dừng ở mức làm nháp, chưa tham gia vào quyết định</div>
+<div class="gap"></div>
+<div class="b1">Nâng từ L1 lên L2 không cần công cụ mới</div>
+<div class="b2">Chỉ cần có cách kiểm định rõ ràng rồi CBQL duyệt — không phát sinh chi phí, không chờ quyết định nào</div>
+</div>
+<div class="callout" style="border-left-color:var(--blue)">Đây là cách tăng giá trị rẻ nhất hiện có</div></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>15</span></div></section></div></div><div class="frame" id="s17"><div class="tag">17</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Chất lượng danh mục</h2></div></div><div class="body">
+<table><tr><th style="width:50%">Đã có dữ liệu đủ 86/86</th><th style="width:50%">Còn trống toàn bộ</th></tr>
+<tr><td class="g">Phân loại dữ liệu · Nhãn độ nhạy</td><td class="r">3 cột chỉ số hiệu quả — 0/86</td></tr>
+<tr><td class="g">Chủ sở hữu dữ liệu · Owner</td><td class="r">Link bằng chứng — 0/86</td></tr>
+<tr><td class="g">Mức uỷ quyền · KPI 84/86</td><td class="r">Chưa tài liệu hoá luồng công việc nào</td></tr>
+</table></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>16</span></div></section></div></div><div class="frame" id="s18"><div class="tag">18</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Cách kiểm định kết quả AI</h2><div class="sub">Trên phần đang chạy, ba phòng gần như đủ — khoảng trống tập trung ở VH</div></div></div><div class="body">
+<table><tr><th style="width:26%">Phòng</th><th style="width:37%">Toàn danh mục</th><th style="width:37%">Nhóm việc đang chạy</th></tr>
+<tr><td class="b">DV</td><td>7/7 — 100%</td><td class="g">2/2 — 100%</td></tr>
+<tr><td class="b">HT-VOIP</td><td>13/17 — 76%</td><td class="g">8/8 — 100%</td></tr>
+<tr><td class="b">R&amp;D</td><td>31/34 — 91%</td><td class="g">28/30 — 93%</td></tr>
+<tr><td class="b">VH</td><td class="a">10/28 — 36%</td><td class="r">3/10 — 30%</td></tr>
+<tr><td class="b">Toàn SCC</td><td class="b">61/86 — 71%</td><td class="b">41/50 — 82%</td></tr>
+</table></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>17</span></div></section></div></div><div class="frame" id="s19"><div class="tag">19</div><div class="box"><section class="slide "><div class="head"><div class="bar amber"></div><div><h2 class="t">Một trùng khớp đáng chú ý</h2></div></div><div class="body"><div class="bul">
+<div class="b1">Cả 7 nhóm việc VH thiếu cách kiểm định cũng chính là 7 nhóm việc cần xử lý về công cụ</div>
+<div class="b2">VH-012 · VH-013 · VH-021 · VH-023 · VH-024 · VH-026 · VH-028</div>
+<div class="gap"></div>
+<div class="b1">Hai vấn đề nằm trên cùng một tập dòng</div>
+<div class="b2">VH rà 7 nhóm việc này để chuyển đường công cụ thì bổ sung luôn cách kiểm định — không phải làm hai đợt</div>
+</div>
+<div class="callout" style="border-left-color:var(--amber)">R&amp;D cũng vậy, quy mô nhỏ hơn: RD-008 và RD-009</div></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>18</span></div></section></div></div><div class="frame" id="s20"><div class="tag">20</div><div class="box"><section class="slide sec"><div class="kicker">PHẦN 3</div><h2>Vị trí CASAN và lộ trình Quý 4</h2><div class="rule"></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>19</span></div></section></div></div><div class="frame" id="s21"><div class="tag">21</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">SCC đang ở đâu so với CASAN Cấp 3</h2></div></div><div class="body">
+<div class="big">9 / 23</div>
+<div class="bigcap">hạng mục đã đạt · <b>6</b> một phần · <b>8</b> chưa có bằng chứng</div>
+<div class="notes">
+<div>8 hành động chuyển Level 2 → 3: &nbsp; 0 đạt · 5 một phần · 3 chưa có</div>
+<div>6 yêu cầu quản trị Cấp 3: &nbsp; 0 đạt · 1 một phần · 5 chưa có</div>
+</div></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>20</span></div></section></div></div><div class="frame" id="s22"><div class="tag">22</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Chi tiết hạng mục — đặc điểm 1 đến 3</h2></div></div><div class="body"><table class="sm"><tr><th style="width:24%">Đặc điểm</th><th style="width:38%">Hạng mục</th><th style="width:17%">Trạng thái</th><th style="width:21%">Ai sở hữu</th></tr><tr><td class="b">1 · Khung quản trị</td><td>Khung quản trị AI chính thức</td><td class="a">Một phần</td><td class="bl">SCC trên nền Công ty</td></tr><tr><td class="b">2 · Danh mục use case</td><td>Theo tác động</td><td class="g">Đạt</td><td class="bl">SCC</td></tr><tr><td class="b"></td><td>Theo rủi ro</td><td class="g">Đạt</td><td class="bl">SCC</td></tr><tr><td class="b"></td><td>Theo tính khả thi</td><td class="g">Đạt</td><td class="bl">SCC</td></tr><tr><td class="b">3 · Dữ liệu</td><td>Phân loại dữ liệu</td><td class="g">Đạt</td><td class="bl">SCC</td></tr><tr><td class="b"></td><td>Nhãn độ nhạy</td><td class="g">Đạt</td><td class="bl">SCC</td></tr><tr><td class="b"></td><td>Dòng lịch sử dữ liệu</td><td class="a">Một phần</td><td class="bl">SCC</td></tr><tr><td class="b"></td><td>Nhật ký kiểm toán</td><td class="r">Chưa có</td><td class="a">Qua Gateway</td></tr></table></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>21</span></div></section></div></div><div class="frame" id="s23"><div class="tag">23</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Chi tiết hạng mục — đặc điểm 4 và 5</h2><div class="sub">Đặc điểm 5 gần như hoàn tất — chỉ còn ngân sách use case</div></div></div><div class="body"><table class="dense"><tr><th style="width:24%">Đặc điểm</th><th style="width:38%">Hạng mục</th><th style="width:17%">Trạng thái</th><th style="width:21%">Ai sở hữu</th></tr><tr><td class="b">4 · Thư viện, kiểm định</td><td>Thư viện prompt tái sử dụng</td><td class="a">Một phần</td><td class="bl">SCC</td></tr><tr><td class="b"></td><td>Mẫu Agent</td><td class="r">Chưa có</td><td class="bl">SCC</td></tr><tr><td class="b"></td><td>Bộ kiểm định</td><td class="a">Một phần</td><td class="bl">SCC</td></tr><tr><td class="b"></td><td>Kiến trúc tham chiếu</td><td class="r">Chưa có</td><td class="bl">SCC</td></tr><tr><td class="b">5 · Vai trò chuyên trách</td><td>Chủ sở hữu dữ liệu</td><td class="g">Đạt</td><td class="bl">SCC</td></tr><tr><td class="b"></td><td>Chủ sở hữu sản phẩm AI</td><td class="a">Một phần</td><td class="bl">SCC</td></tr><tr><td class="b"></td><td>Trưởng nhóm quản trị AI</td><td class="g">Đạt</td><td class="bl">SCC</td></tr><tr><td class="b"></td><td>Người kiểm định</td><td class="g">Đạt</td><td class="bl">SCC</td></tr><tr><td class="b"></td><td>Chủ sở hữu bảo mật</td><td class="g">Đạt</td><td class="bl">SCC</td></tr></table></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>22</span></div></section></div></div><div class="frame" id="s24"><div class="tag">24</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Chi tiết hạng mục — đặc điểm 6 · Kỹ thuật</h2><div class="sub">Harness chung và RAG chuẩn đi kèm nền tảng AI cấp Công ty — SCC đăng ký dùng, không tự xây</div></div></div><div class="body"><table><tr><th style="width:50%">Hạng mục</th><th style="width:22%">Trạng thái</th><th style="width:28%">Ai sở hữu</th></tr>
+<tr><td class="b">Harness chung</td><td class="r">Chưa có</td><td class="r">Nền tảng Công ty</td></tr>
+<tr><td class="b">Sổ đăng ký Agent</td><td class="r">Chưa có</td><td class="bl">SCC</td></tr>
+<tr><td class="b">Danh mục công cụ có lược đồ</td><td class="a">Một phần</td><td class="bl">SCC + CNTT–bảo mật</td></tr>
+<tr><td class="b">Đường ống kiểm định hồi quy</td><td class="r">Chưa có</td><td class="bl">SCC</td></tr>
+<tr><td class="b">Kiến trúc RAG chuẩn</td><td class="r">Chưa có</td><td class="r">Nền tảng Công ty</td></tr>
+<tr><td class="b">Giám sát chi phí và chất lượng</td><td class="r">Chưa có</td><td class="a">Qua Gateway</td></tr>
+</table></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>23</span></div></section></div></div><div class="frame" id="s25"><div class="tag">25</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Tám hạng mục còn thiếu — ai làm gì</h2><div class="sub">Chỉ 4 hạng mục thật sự phải xây mới</div></div></div><div class="body">
+<table class="sm"><tr><th style="width:24%">Ai làm</th><th style="width:54%">Hạng mục</th><th style="width:22%">Khi nào</th></tr>
+<tr><td class="bl b">SCC tự làm — 4</td><td>Mẫu Agent · Kiến trúc tham chiếu · Sổ đăng ký Agent · Đường ống kiểm định hồi quy</td><td>T10 – T11</td></tr>
+<tr><td class="a b">Đi kèm Gateway — 2</td><td>Nhật ký kiểm toán · Giám sát chi phí và chất lượng</td><td>Sau khi duyệt Gateway</td></tr>
+<tr><td class="r b">Chờ nền tảng Công ty — 2</td><td>Harness chung · Kiến trúc RAG chuẩn</td><td>Theo tiến độ cấp trên</td></tr>
+</table></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>24</span></div></section></div></div><div class="frame" id="s26"><div class="tag">26</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Sáu hạng mục một phần — đóng nhanh hơn</h2><div class="sub">R&amp;D đã làm được ba thứ — việc còn lại là mở cho ba phòng cùng dùng</div></div></div><div class="body">
+<table class="sm"><tr><th style="width:22%">Nhóm</th><th style="width:44%">Hạng mục</th><th style="width:34%">Việc còn lại</th></tr>
+<tr><td class="g b">Mở rộng từ R&amp;D</td><td>Dòng lịch sử dữ liệu · Bộ kiểm định · Thư viện prompt</td><td>Nhân rộng cho VH, HT-VOIP, DV</td></tr>
+<tr><td class="b">Hoàn thiện nốt</td><td>Khung quản trị AI</td><td>Vòng đời use case · phân quyền</td></tr>
+<tr><td></td><td>Chủ sở hữu sản phẩm AI</td><td>Gắn ngân sách use case</td></tr>
+<tr><td></td><td>Danh mục công cụ có lược đồ</td><td>Lược đồ và phê duyệt công cụ</td></tr>
+</table></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>25</span></div></section></div></div><div class="frame" id="s27"><div class="tag">27</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Lộ trình Quý 4</h2></div></div><div class="body"><div class="cards">
+<div class="card"><div class="num">10</div><h3>Đóng nền Cấp 3</h3>
+<p>Gateway · duyệt công cụ · đào tạo · đo baseline</p>
+<p style="margin-top:auto;color:var(--green);font-weight:600">Rà soát 09/10 · 23/10</p></div>
+<div class="card"><div class="num">11</div><h3>Hoàn thiện bằng chứng</h3>
+<p>Bộ kiểm định · kiến trúc tham chiếu · chọn phạm vi pilot</p>
+<p style="margin-top:auto;color:var(--green);font-weight:600">28/11 — đánh giá có điều kiện</p></div>
+<div class="card"><div class="num">12</div><h3>Pilot Agent có giám sát</h3>
+<p>01–28/12 · cổng go/no-go trước khi mở quyền</p>
+<p style="margin-top:auto;color:var(--green);font-weight:600">Báo cáo năm 30/12</p></div>
+</div></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>26</span></div></section></div></div><div class="frame" id="s28"><div class="tag">28</div><div class="box"><section class="slide sec"><div class="kicker">PHẦN 4</div><h2>Việc thực hiện tiếp theo</h2><div class="rule"></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>27</span></div></section></div></div><div class="frame" id="s29"><div class="tag">29</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Tháng 10</h2></div></div><div class="body"><table class="sm">
+<tr><th style="width:26%">Nhóm việc</th><th style="width:50%">Nội dung</th><th style="width:24%">Chủ trì</th></tr>
+<tr><td class="b">Mở đường dùng hợp lệ</td><td>Thiết kế và nghiệm thu AI Gateway · phê duyệt 9 công cụ</td><td class="dim">Đầu mối · CNTT–bảo mật</td></tr>
+<tr><td class="b">Xử lý rủi ro đang có</td><td>Chuyển 9 nhóm việc Cấp 3 sang đường hợp lệ — ưu tiên 6 ca HT-VOIP</td><td class="dim">HT-VOIP · VH</td></tr>
+<tr><td class="b">Bổ sung cách kiểm định</td><td>9 nhóm việc còn trống — VH 7, R&amp;D 2</td><td class="dim">VH · R&amp;D</td></tr>
+<tr><td class="b">Nhân rộng từ R&amp;D</td><td>Mở dòng lịch sử dữ liệu · bộ kiểm định · thư viện prompt</td><td class="dim">R&amp;D · đầu mối</td></tr>
+<tr><td class="b">Bắt đầu đo</td><td>Baseline cho 50 nhóm việc đang chạy</td><td class="dim">4 phòng</td></tr>
+<tr><td class="b">Hoàn thiện hồ sơ</td><td>Ghi bằng chứng nghiệm thu cho 6 hạng mục một phần</td><td class="dim">Đầu mối chương trình</td></tr>
+<tr><td class="b">Làm rõ cấp Công ty</td><td>Mẫu khung quản trị · Harness chung · RAG chuẩn</td><td class="dim">Đầu mối chương trình</td></tr>
+</table></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>28</span></div></section></div></div><div class="frame" id="s30"><div class="tag">30</div><div class="box"><section class="slide "><div class="head"><div class="bar "></div><div><h2 class="t">Tháng 11 và 12</h2></div></div><div class="body"><table class="sm">
+<tr><th style="width:10%">Tháng</th><th style="width:64%">Nội dung</th><th style="width:26%">Chủ trì</th></tr>
+<tr><td class="b">11</td><td>Xây mẫu Agent · kiến trúc tham chiếu · sổ đăng ký Agent · đường ống kiểm định</td><td class="dim">Đội nòng cốt</td></tr>
+<tr><td class="b">11</td><td>Ban hành khung quản trị AI của SCC</td><td class="dim">Đầu mối chương trình</td></tr>
+<tr><td class="b">11</td><td>Gắn ngân sách use case ưu tiên</td><td class="dim">BGĐ · CBQL</td></tr>
+<tr><td class="b">11</td><td>Chọn phạm vi pilot và thiết kế kiến trúc uỷ quyền</td><td class="dim">Đầu mối · phòng liên quan</td></tr>
+<tr><td class="b">12</td><td>Pilot Agent 01–28/12 có cổng go/no-go</td><td class="dim">Nhóm pilot</td></tr>
+<tr><td class="b">12</td><td>Giám sát vận hành · kiểm thử quy trình hoàn tác</td><td class="dim">Nhóm pilot · kiểm định</td></tr>
+<tr><td class="b">12</td><td>Đo trước–sau · báo cáo năm 30/12</td><td class="dim">4 phòng · QuyDT7</td></tr>
+</table></div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>29</span></div></section></div></div><div class="frame" id="s31"><div class="tag">31</div><div class="box"><section class="slide thx"><div class="topband"></div>
+<h1>Xin cảm ơn Ban Giám đốc</h1>
+<div class="sub2">Rất mong nhận được ý kiến chỉ đạo</div>
+<div class="pts">
+<div>Phần dữ liệu nền đã có — danh mục 86 nhóm việc, phân loại dữ liệu, chủ sở hữu dữ liệu</div>
+<div>Việc còn lại là bằng chứng và nhân rộng cái đã làm được</div>
+<div>Bốn hạng mục SCC tự xây · hai hạng mục đi kèm Gateway · hai hạng mục chờ nền tảng Công ty</div>
+</div>
+<div class="qa">Q &amp; A</div><div class="foot"><span>Trung tâm SCC · Báo cáo Ban Giám đốc · 19/09/2026</span><span>30</span></div></section></div></div></div></div>
+<script>
+var boxes=[].slice.call(document.querySelectorAll('.box'));
+function fit(){boxes.forEach(function(b){
+  var k=b.clientWidth/1920, s=b.querySelector('.slide');
+  if(s)s.style.transform='scale('+k+')';});}
+addEventListener('resize',fit); addEventListener('load',fit); fit();
+
+var links=[].slice.call(document.querySelectorAll('#toc a'));
+var frames=[].slice.call(document.querySelectorAll('.frame'));
+var io=new IntersectionObserver(function(es){
+  es.forEach(function(e){
+    if(!e.isIntersecting)return;
+    var id=e.target.id;
+    links.forEach(function(a){a.classList.toggle('act',a.getAttribute('href')==='#'+id);});
+    var act=document.querySelector('#toc a.act');
+    if(act&&act.offsetTop<document.getElementById('toc').scrollTop)act.scrollIntoView({block:'nearest'});
+  });
+},{rootMargin:'-45% 0px -45% 0px'});
+frames.forEach(function(f){io.observe(f)});
+
+var t=document.getElementById('toc'),btn=document.getElementById('toggle');
+if(btn)btn.onclick=function(){t.classList.toggle('open')};
+links.forEach(function(a){a.onclick=function(){if(innerWidth<=1080)t.classList.remove('open')}});
+</script>
+</body>
+</html>
